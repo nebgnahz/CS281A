@@ -1,4 +1,4 @@
-# _Project AR: A comparison study of sensor placement for Activity Recognition_
+# _Activity Recognition_
 
 _Description: This is the repository for [CS281A](http://www.cs.berkeley.edu/~jordan/courses/281A-spring14/)_
 
