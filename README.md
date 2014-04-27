@@ -7,3 +7,14 @@ A high-level goal of this project is to evaluate how activity recoginition algor
 
 In this project, we seek to quantify the difference.
 
+
+## server information
+- Server address:  
+	galaxy.eecs.berkeley.edu:8000
+
+- data url:  
+	http://galaxy.eecs.berkeley.edu:8000/
+	
+- Export data from mongodb command:  
+    mongoexport --host localhost --db bearloc --collection data --csv --out data1.csv --fields type,id,eventnano,sysnano,x,y,z,xr,yr,zr
+
