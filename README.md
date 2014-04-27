@@ -12,6 +12,9 @@ In this project, we seek to quantify the difference.
 - Server address:  
 	galaxy.eecs.berkeley.edu:8000
 
+- username  
+	cs281
+
 - data url:  
 	http://galaxy.eecs.berkeley.edu:8000/
 	
