@@ -1,13 +1,35 @@
+## experiement log, reverse time order
+## - 2014-04-26 17:28 | @collecting Antonio upstairs
+## - 2014-04-26 17:28 | @collecting Antonio downstairs done
+## - 2014-04-26 17:28 | @collecting Antonio downstairs
+## - 2014-04-26 17:28 | @collecting Antonio upstairs done
+## - 2014-04-26 17:26 | @collecting Antonio jogging
+## - 2014-04-26 17:26 | @collecting Antonio jogging done
+## - 2014-04-26 17:25 | @collecting Antonio walk
+## - 2014-04-26 17:25 | @collecting Antonio walk done
+## - 2014-04-26 17:24 | @collecting Antonio standing
+## - 2014-04-26 17:24 | @collecting Antonio standing done
+
+
 data <- read.csv("http://galaxy.eecs.berkeley.edu:8000/data1.csv")
 
-acc <- data[data$type == "accelerometer",]
-acc[acc$id == "276dd3d0-fda1-31a8-9a74-8764e9d2a75e", 4] <-
-  acc[acc$id == "276dd3d0-fda1-31a8-9a74-8764e9d2a75e", 4] - mean(acc[acc$id == "276dd3d0-fda1-31a8-9a74-8764e9d2a75e", 4])
 
-acc[acc$id == "9026086e-bd07-3f96-9622-757da2907a93", 4] <-
-  acc[acc$id == "9026086e-bd07-3f96-9622-757da2907a93", 4] - mean(acc[acc$id == "9026086e-bd07-3f96-9622-757da2907a93", 4])
+data[data$id == "276dd3d0-fda1-31a8-9a74-8764e9d2a75e", 4] <-
+  data[data$id == "276dd3d0-fda1-31a8-9a74-8764e9d2a75e", 4] - mean(data[data$id == "276dd3d0-fda1-31a8-9a74-8764e9d2a75e", 4])
+
+data[data$id == "9026086e-bd07-3f96-9622-757da2907a93", 4] <-
+  data[data$id == "9026086e-bd07-3f96-9622-757da2907a93", 4] - mean(data[data$id == "9026086e-bd07-3f96-9622-757da2907a93", 4])
+
+acc <- data[data$type == "accelerometer",]
+gyro <- data[data$type == "gyroscope",]
+rotation <- data[data$type == "rotation",]
 
 ggplot(acc, aes(x = sysnano, y = z)) + geom_point() + facet_grid(. ~ id)
+
+ggplot(gyro, aes(x = sysnano, y = x)) + geom_point() + facet_grid(. ~ id)
+
+ggplot(rotation, aes(x = sysnano, y = zr)) + geom_point() + facet_grid(. ~ id)
+ggplot(light, aes(x = sysnano, y = zr)) + geom_point() + facet_grid(. ~ id)
 
 
 ## > 
