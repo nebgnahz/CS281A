@@ -1,0 +1,44 @@
+% set up tight list spacing
+\usepackage{enumitem} 
+\setlist{nolistsep,nosep}
+
+% for toggles
+\usepackage{etoolbox}
+
+\newcommand {\studyquote}[1]{\em ``#1''\normalfont}
+
+% CHANGE FROM TOGGLE TRUE TO TOGGLE FALSE FOR NON-ANONYMOUS RENDERING
+% http://tex.stackexchange.com/questions/5894/latex-conditional-expression
+\newtoggle{anonymous}
+%\toggletrue{anonymous}
+\togglefalse{anonymous}
+
+% CHANGE FROM TOGGLE TRUE TO TOGGLE FALSE TO HIDE COMMENTS
+\newtoggle{comments}
+\toggletrue{comments}
+%\togglefalse{comments}
+
+% Comment region command (from Wesley Willett)
+\usepackage[usenames]{color}
+\usepackage[usenames,dvipsnames]{xcolor}
+\iftoggle{comments} {
+  %if we want to show comments
+  %% ============================================================
+  %% add your names here
+  %% possible colors include:
+  %%   Orange, magenta, NavyBlue, violet, BrickRed, OliveGreen
+  %% ============================================================
+  \newcommand {\ben}[1]{{\color{BrickRed}\bf{BZ: #1}\normalfont}}
+}{
+  %if we don't want to show comments
+  \newcommand {\ben}[1]{}
+}
+
+% \newcommand {\systemname}{HOBS }
+% \newcommand {\systemnamenospace}{HOBS}
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End: 
