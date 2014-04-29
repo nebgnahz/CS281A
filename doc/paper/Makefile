@@ -21,7 +21,11 @@ pdf: $(SOURCES)
 main.pdf: pdf
 
 check: $(TEXFILES)
-	$(SPELL) check $(TEXFILES)
+	@for f in $(TEXFILES) ; \
+	do \
+		echo Spelling check in $$f ... ; \
+		$(SPELL) check $$f ; \
+	done
 
 open: $(PDF)
 	open $(TEX).pdf

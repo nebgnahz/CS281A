@@ -36,7 +36,7 @@ data
 *.tdo
 auto
 tmp
-
+*.bak
 *.pyc
 
 doc/paper/main.pdf
