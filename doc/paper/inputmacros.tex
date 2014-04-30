@@ -15,8 +15,8 @@
 
 % CHANGE FROM TOGGLE TRUE TO TOGGLE FALSE TO HIDE COMMENTS
 \newtoggle{comments}
-\toggletrue{comments}
-%\togglefalse{comments}
+%\toggletrue{comments}
+\togglefalse{comments}
 
 % Comment region command (from Wesley Willett)
 \usepackage[usenames]{color}
@@ -29,9 +29,11 @@
   %%   Orange, magenta, NavyBlue, violet, BrickRed, OliveGreen
   %% ============================================================
   \newcommand {\ben}[1]{{\color{BrickRed}\bf{BZ: #1}\normalfont}}
+  \newcommand {\yuxun}[1]{{\color{OliveGreen}\bf{YX: #1}\normalfont}}
 }{
   %if we don't want to show comments
   \newcommand {\ben}[1]{}
+  \newcommand {\yuxun}[1]{}
 }
 
 % \newcommand {\systemname}{HOBS }
