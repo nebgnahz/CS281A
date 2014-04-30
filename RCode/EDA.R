@@ -58,3 +58,113 @@ ggplot(light, aes(x = sysnano, y = zr)) + geom_point() + facet_grid(. ~ id)
 ##  Max.   : 30.604   Max.   : 0.84   Max.   : 0.75   Max.   : 0.97  
 ##  NA's   :17241     NA's   :82134   NA's   :82134   NA's   :82134  
 ## > 
+
+acc_glass <- acc[acc$id == "276dd3d0-fda1-31a8-9a74-8764e9d2a75e",]
+acc_glass1 = acc_glass[acc_glass$sysnano>(-1e11)&acc_glass$sysnano<(-5e10),]
+acc_glass2 = acc_glass[acc_glass$sysnano>(-2.5e10)&acc_glass$sysnano<0,]
+acc_glass3 = acc_glass[acc_glass$sysnano>(2.5e10)&acc_glass$sysnano<(5e10),]
+acc_glass4 = acc_glass[acc_glass$sysnano>(1e11)&acc_glass$sysnano<(1.3e11),]
+acc_glass5 = acc_glass[acc_glass$sysnano>(1.35e11),]
+ggplot(acc_glass3, aes(x = sysnano, y = z)) + geom_point() + facet_grid(. ~ id)
+norm_vec <- function(x) sqrt(sum(x^2))
+bin_dist <- function(x,n){
+  N = length(x);
+  step = (max(x)-min(x))/n;
+  bins = seq(min(x),max(x),by=step);
+  b <- hist(x,breaks=bins,plot=FALSE);
+  proba = b$count/N;
+  return(proba);
+}
+
+## time and frequency domain feature extraction
+feature_ext <- function(data,window_size){
+  begin_time = data[1,'sysnano'];
+  end_time = data[length(data[,'sysnano']),'sysnano'];
+  # winodw <- seq(from=begin_time,to=end_time,length.out=(window_num+1));
+  #time domain features
+  mean_x=c();mean_y=c();mean_z=c();var_x=c();var_y=c();var_z=c();
+  cov_xy=c();cov_yz=c();cov_zx=c();magnitude=c();
+  diff_x=c();diff_y=c();diff_z=c();
+  #frequency domain features
+  fft_x=c();fft_y=c();fft_z=c();
+  #binned distribution for each axis
+  dist_x=c();dist_y=c();dist_z=c();
+  #ignore first and last window
+  i = window_size;
+  while (i<dim(data)[1]-2*window_size){
+    
+    tmp = cbind(data$x[seq(i,i+window_size)],data$y[seq(i,i+window_size)],data$z[seq(i,i+window_size)]);
+    magnitude = c(magnitude,mean(apply(tmp,1,norm_vec))); 
+    mean_x = c(mean_x,mean(data$x[seq(i,i+window_size)],na.rm = T));
+    mean_y = c(mean_y,mean(data$y[seq(i,i+window_size)],na.rm = T));
+    mean_z = c(mean_z,mean(data$z[seq(i,i+window_size)],na.rm = T));
+    var_x = c(var_x,var(data$x[seq(i,i+window_size)],na.rm = T));
+    var_y = c(var_y,var(data$y[seq(i,i+window_size)],na.rm = T));
+    var_z = c(var_z,var(data$z[seq(i,i+window_size)],na.rm = T));
+    cov_xy = c(cov_xy,cov(data$x[seq(i,i+window_size)],data$y[seq(i,i+window_size)],use='na.or.complete'));
+    cov_yz = c(cov_yz,cov(data$y[seq(i,i+window_size)],data$z[seq(i,i+window_size)],use='na.or.complete'));
+    cov_zx = c(cov_zx,cov(data$z[seq(i,i+window_size)],data$x[seq(i,i+window_size)],use='na.or.complete'));
+    diff_x = c(diff_x,mean(diff(data$x[seq(i,i+window_size)],1)));
+    diff_y = c(diff_y,mean(diff(data$y[seq(i,i+window_size)],1)));
+    diff_z = c(diff_z,mean(diff(data$z[seq(i,i+window_size)],1)));
+    xf = fft((data$x[seq(i,i+window_size)]));
+    yf = fft((data$y[seq(i,i+window_size)]));
+    zf = fft((data$z[seq(i,i+window_size)]));
+    fft_x = c(fft_x,mean(Mod(xf)));
+    fft_y = c(fft_y,mean(Mod(yf)));
+    fft_z = c(fft_z,mean(Mod(zf)));
+    n = 10;
+    dist_x = rbind(dist_x,bin_dist(data$x[seq(i,i+window_size)],n));
+    dist_y = rbind(dist_y,bin_dist(data$y[seq(i,i+window_size)],n));
+    dist_z = rbind(dist_z,bin_dist(data$z[seq(i,i+window_size)],n));
+    i = i +window_size;
+  }
+  colnames(dist_x) <- colnames(dist_x, do.NULL = FALSE, prefix = "dist_x")
+  colnames(dist_y) <- colnames(dist_y, do.NULL = FALSE, prefix = "dist_y")
+  colnames(dist_z) <- colnames(dist_z, do.NULL = FALSE, prefix = "dist_z")
+  feature_time = data.frame(mean_x,mean_y,mean_z,var_x,var_y,var_z,cov_xy,cov_yz,cov_zx,magnitude,diff_x,
+                            diff_y,diff_z);
+  feature_freq = data.frame(fft_x,fft_y,fft_z);
+  feature_dist = cbind(dist_x,dist_y,dist_z);
+  return(cbind(feature_time,feature_freq,feature_dist));
+}
+
+#we may want to do EDA on seperate sets
+feature1 = feature_ext(acc_glass1,50);
+y = rep(1,dim(feature1)[1]);
+dat1 = cbind(y,feature1);
+feature2 = feature_ext(acc_glass2,50);
+y = rep(2,dim(feature2)[1]);
+dat2 = cbind(y,feature2);
+feature3 = feature_ext(acc_glass3,50);
+y = rep(3,dim(feature3)[1]);
+dat3 = cbind(y,feature3);
+feature4 = feature_ext(acc_glass4,50);
+y = rep(4,dim(feature4)[1]);
+dat4 = cbind(y,feature4);
+feature5 = feature_ext(acc_glass5,50);
+y = rep(5,dim(feature5)[1]);
+dat5 = cbind(y,feature5);
+
+ggplot(feature1, aes(x = mean_x)) + geom_histogram(aes(fill = ..count..))
+
+#data in an uquified dataframe for model building
+dat_all = rbind(dat1,dat2,dat3,dat4,dat5);
+
+# It's time for these quasi-reliable libraries
+library('nnet')
+library('foreign')
+library('reshape2')
+library('RWeka') 
+library('C50')
+library('e1071')
+
+# multi-class logistic regression test
+test1 <- multinom(y ~ mean_x + var_z + magnitude, data = dat_all)
+# multi-class decision tree J48
+test2 <- J48( y ~ mean_x + var_z + magnitude , data= dat_all, control= Weka_control(M=1,U=TRUE))
+# multi-class decision tree C4.5
+test3 <- C5.0(as.factor(y) ~ mean_x + var_z + magnitude, data = dat_all)
+# multi-class svm 
+test4 <- svm(y ~ mean_x + var_z + magnitude,data=dat_all)
+
