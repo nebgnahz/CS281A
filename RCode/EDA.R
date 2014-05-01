@@ -168,3 +168,13 @@ test3 <- C5.0(as.factor(y) ~ mean_x + var_z + magnitude, data = dat_all)
 # multi-class svm 
 test4 <- svm(y ~ mean_x + var_z + magnitude,data=dat_all)
 
+library('HMM')
+library('bnlearn')
+library('depmixS4')  #this one looks better
+test5 <- depmix(list(mean_x~1,var_z~1,magnitude~1),data=dat_all,nstates=5,
+              family=list(gaussian(),gaussian(),gaussian()));
+fit_test5 <- fit(test5)
+summary(fit_test5,which="all")
+post5 <- posterior(fit_test5)
+param5 <- forwardbackward(fit_test5, return.all=TRUE, useC=TRUE)
+
