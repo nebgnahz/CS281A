@@ -1,0 +1,17 @@
+{
+  "uuid": "7b017f7d-21ab-4e18-8ff5-7f63b6e30345",
+  "shortName": "AccLogger",
+  "longName": "AccLogger",
+  "companyName": "UC Berkeley",
+  "versionCode": 1,
+  "versionLabel": "1.0.0",
+  "watchapp": {
+    "watchface": false
+  },
+  "appKeys": {
+    "dummy": 0
+  },
+  "resources": {
+    "media": []
+  }
+}
