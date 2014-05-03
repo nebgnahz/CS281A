@@ -48,11 +48,11 @@ public class AccelData {
   @Override
   public String toString() {
     return 
-      timestamp.toString() + ", "
-      x.toString() + ", "
-      y.toString() + ", "
-      z.toString() + ", "
-      didVibrate.toString();
+      String.valueOf(timestamp) + ", " + 
+      String.valueOf(x) + ", " + 
+      String.valueOf(y) + ", " + 
+      String.valueOf(z) + ", " + 
+      String.valueOf(didVibrate);
   }
 
   public static List<AccelData> fromDataArray(byte[] data) {
