@@ -47,18 +47,18 @@ pebble_install: pebble_build
 server_run:
 	cd /home/cs281/data && python -m SimpleHTTPServer
 
-db_export:
+server_export:
 	mongoexport --host localhost --db bearloc --collection data --csv --out text.csv --fields type,id,eventnano,sysnano,x,y,z,xr,yr,zr
 
-db_stat:
+server_stat:
 	$(info counting number of records in bearloc ) 
 	mongo bearloc --eval "db.data.count()"
 	mongoexport --host localhost --db bearloc --collection data --csv --out text.csv --fields type; sort text.csv | uniq --count
 
-db_clean:
+server_clean:
 	mongo bearloc --eval "db.data.remove()"
 
-db_sync:
+sync_server:
 	rsync Makefile galaxy:~/Makefile
 	rsync -r galaxy:~/data/ ./data/
 
