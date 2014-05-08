@@ -21,3 +21,5 @@ In this project, we seek to quantify the difference.
 - Export data from mongodb command:  
     mongoexport --host localhost --db bearloc --collection data --csv --out data1.csv --fields type,id,eventnano,sysnano,x,y,z,xr,yr,zr
 
+- Data Collected:  
+  I've collected another round of data, they are now on the [server](http://galaxy.eecs.berkeley.edu:8000) with name: `log_glass_phone.csv` and `log_pebble.csv`. The groundtruth can be extracted from the [video](https://www.dropbox.com/s/xr7rfiolz5x6mxo/2014-05-03%2023.00.29.mov).
