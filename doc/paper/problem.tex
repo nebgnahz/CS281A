@@ -2,6 +2,21 @@
 \section{Problem Formulation}
 \label{sec:problem-formulation}
 
+A supervised learning framework for activity recognition consist of data collection, transformation, and the design of adequate learning algorithm. In this section, we first briefly describe our data collection protocol, and detailed system description is postponed to section (\ref{sec:awesome-system}) for completeness. In section (\ref{subsec: data-transform}), we show how raw data is transformed into feature space. In addition, the problem of feature selection  for efficient learning is discussed. In Section (\ref{subsec: learning}), we formulate the learning problem, and propose two methods for a comparative study.  
+
+\subsection{Data Collection}
+\label{subsec: data-collection}
+In order to collect varies sensor data from devices such as Android phones and Google glass, an awesome system is designed and deployed which pulls readings of accelerometers, gyroscope, magnetic and gravity sensor continuously into a database. Section (\ref{sec:awesome-system}) is devoted for more details of this setup. From a data analysis point of view, the obtained observations are a set of time series of sensor readings with descent time resolution of up to 10 nano seconds, and the labels are corresponding five factors $[1 to 5]$ each representing a specific activity.
+
+The data is collected in a controlled manner, i.e. we asked one experimenter wearing all devices to perform activities as requested, and anther experimenter served as supervisor recording starting/ending time of each activity in the sequence. Hence labels of the a sample could be found easily by looking at the time slot. Note that IRB is a necessity for this kind of experiment if more volunteers are involved, thus for now the experiment is only conducted by two people(the two authors...) 
+
+\subsection{Data Transformation and Feature Selection}
+\label{subsec: data-transform}
+
+
+\subsection{Activity Recognition as Supervised Learning}
+\label{subsec: learning}
+
 Concentrate single-mindedly on a narrative that:
 \begin{itemize}
 \item Describes the problem, and why it is interesting
