@@ -13,21 +13,32 @@
 
 data <- read.csv("http://galaxy.eecs.berkeley.edu:8000/data1.csv")
 
+## clean up on time, now it should be easier for us to interprate the time
+options("digits.secs"=9)
+phone_start_time <- strptime("2014-05-03 15:58:06.000000001", "%Y-%m-%d %H:%M:%OS")
+glass_start_time <- strptime("2014-05-03 15:59:01.000000001", "%Y-%m-%d %H:%M:%OS")
 
-data[data$id == "276dd3d0-fda1-31a8-9a74-8764e9d2a75e", 4] <-
-  data[data$id == "276dd3d0-fda1-31a8-9a74-8764e9d2a75e", 4] - mean(data[data$id == "276dd3d0-fda1-31a8-9a74-8764e9d2a75e", 4])
+phone <- data[data$id == "9026086e-bd07-3f96-9622-757da2907a93",]
+glass <- data[data$id == "276dd3d0-fda1-31a8-9a74-8764e9d2a75e",]
+
+phone$ts2 <- phone$sysnano - min(phone$sysnano)
+phone$posixlt <- phone_start_time + phone$ts2/1E9
+glass$ts2 <- glass$sysnano - min(glass$sysnano)
+glass$posixlt <- glass_start_time + glass$ts2/1E9
+
+
+data$ts[data$id == "276dd3d0-fda1-31a8-9a74-8764e9d2a75e"] <-
+  (data[data$id == "276dd3d0-fda1-31a8-9a74-8764e9d2a75e", 4] - min(data[data$id == "276dd3d0-fda1-31a8-9a74-8764e9d2a75e", 4])) / 1E9
 
 data[data$id == "9026086e-bd07-3f96-9622-757da2907a93", 4] <-
-  data[data$id == "9026086e-bd07-3f96-9622-757da2907a93", 4] - mean(data[data$id == "9026086e-bd07-3f96-9622-757da2907a93", 4])
+  data[data$id == "9026086e-bd07-3f96-9622-757da2907a93", 4] - min(data[data$id == "9026086e-bd07-3f96-9622-757da2907a93", 4]) / 1000000000 + start_time
 
 acc <- data[data$type == "accelerometer",]
 gyro <- data[data$type == "gyroscope",]
 rotation <- data[data$type == "rotation",]
 
 ggplot(acc, aes(x = sysnano, y = z)) + geom_point() + facet_grid(. ~ id)
-
 ggplot(gyro, aes(x = sysnano, y = x)) + geom_point() + facet_grid(. ~ id)
-
 ggplot(rotation, aes(x = sysnano, y = zr)) + geom_point() + facet_grid(. ~ id)
 ggplot(light, aes(x = sysnano, y = zr)) + geom_point() + facet_grid(. ~ id)
 
