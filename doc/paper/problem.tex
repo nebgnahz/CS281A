@@ -2,30 +2,55 @@
 \section{Problem Formulation}
 \label{sec:problem-formulation}
 
-A supervised learning framework for activity recognition consist of data collection, transformation, and the design of adequate learning algorithm. In this section, we first briefly describe our data collection protocol, and detailed system description is postponed to section (\ref{sec:awesome-system}) for completeness. In section (\ref{subsec: data-transform}), we show how raw data is transformed into feature space. In addition, the problem of feature selection  for efficient learning is discussed. In Section (\ref{subsec: learning}), we formulate the learning problem, and propose two methods for a comparative study.  
+A supervised learning framework for activity recognition consists of data collection, transformation, and the design of adequate learning algorithm. In this section, we first briefly describe our data collection protocol, and detailed system description is postponed to section (\ref{sec:awesome-system}) for completeness. In section (\ref{subsec: data-transform}), we show how raw data is transformed into feature space. In addition, the problem of feature selection  for efficient learning is discussed. In Section (\ref{subsec: learning}), we formulate the learning problem, and propose two methods for a comparative study.  
 
 \subsection{Data Collection}
 \label{subsec: data-collection}
-In order to collect varies sensor data from devices such as Android phones and Google glass, an awesome system is designed and deployed which pulls readings of accelerometers, gyroscope, magnetic and gravity sensor continuously into a database. Section (\ref{sec:awesome-system}) is devoted for more details of this setup. From a data analysis point of view, the obtained observations are a set of time series of sensor readings with descent time resolution of up to 10 nano seconds, and the labels are corresponding five factors $[1 to 5]$ each representing a specific activity.
+In order to collect varies sensor data from devices such as Android phones and Google glass, an awesome system is designed and deployed which pulls readings of accelerometers, gyroscope, magnetic and rotation sensor continuously into a database. Each sensor record 3 dimensional data, namely, Cartesian $x,y,z$ for accelerometer, gyroscope, and magnetic sensor, and spherical $x_r,y_r,z_r$ for magnetic sensor. Hence the raw data has dimension $12$. Section (\ref{sec:awesome-system}) is devoted for more details of the sensor configuration. From a data analysis point of view, the obtained observations are a set of time series of sensor readings with descent time resolution of up to 10 nano seconds, and the labels are corresponding five factors $[1 - 5]$ each representing a specific activity. 
 
-The data is collected in a controlled manner, i.e. we asked one experimenter wearing all devices to perform activities as requested, and anther experimenter served as supervisor recording starting/ending time of each activity in the sequence. Hence labels of the a sample could be found easily by looking at the time slot. Note that IRB is a necessity for this kind of experiment if more volunteers are involved, thus for now the experiment is only conducted by two people(the two authors...) 
+The data is collected in a controlled manner, i.e. we asked one experimenter wearing all devices to perform activities as requested, and anther experimenter served as supervisor recording starting/ending time of each activity in the sequence. Hence labels of the a sample could be found easily by looking at the time slot. Note that IRB is a necessity for this kind of experiment if more volunteers are involved, thus for now the experiment is conducted by the authors. 
 
 \subsection{Data Transformation and Feature Selection}
 \label{subsec: data-transform}
+
+The raw data is a $12$ dimensional time series exhibiting non-stationarity with very fine time resolution. It is very difficult if not impossible to learn a good classifier that map the raw sensor readings directly to labels/classes. As most of the machine learning task, we face the challenge problem of feature extraction. In previous literature, it is widely acknowledged that a window frame based feature extraction could be adopted since most human activities are approximately periodic in nature. In this paper, we also consider feature extraction within a window frame, however, instead of merely focus on time and frequency domain feature, we proposed to add empirical distribution of frequencies as another categorical  feature. This is because intuitively, different activities may induce very different frequency nature of the body. To be specific, we add binned distribution of FFT coefficients for each window as a $d$ dimensional feature, where $d$ is the number of bins. In addition, we calculate the empirical entropy as another feature candidate. As for time domain, we propose to add first order derivative (difference in time series) as an additional feature, the reason for this is the observation that different activities usually have distinguished "rate of change" in terms of body movement.
+
+To sum up, we have
+\begin{itemize}
+\item \textbf{Time Domain Features:} In each window, for one particular observation time series, we directly calculate Mean, Variance, and for each 3D streams of a particular sensor, we calculate the Covariance and the Magnitude. We also calculate the discrete first derivative and export the same statistics as features. 
+\item \textbf{Frequency Domain Features:} We use Fast Fourier Transform to delve into frequency domain, and export energy and entropy of resulted FFT coefficients in each window.
+\end{itemize}
+
+\begin{table}
+\begin{center}
+
+\begin{tabular}{|l|l|}
+      \hline
+      \hline
+      Time Domain & $\bar{x},\bar{y},\bar{z},var(x),var(y),var(z)$\\
+      &$cov(x,y),cov(y,z),cov(z,x)$\\
+      &$\sqrt{x^2+y^2+z^2}$\\
+      & $x_{t+1}-x_{t},y_{t+1}-y_{t},z_{t+1}-z_{t}$\\
+  \hline
+  Frequency Domain  & $\frac{\sum_j w_j^2}{N}, -\sum_i p_ilog(p_i)$  \\
+  \hline
+\end{tabular}
+\end{center}
+\caption{Extracted Features}
+\end{table}
+
+Hence the transformed data set is a $20$ dimensional tuple, with $19$ features and $1$ label indicating the ground truth of corresponding activity. Note that another information that are implicitly collected is the transition between activities. In fact, the consideration of adding this information or not is going to lead us to two entirely different probabilistic models. Namely, if dynamic transition information is ignored, the problem reduces to common classification problem, and the underlying assumption is that each observation is draw $iid$ from some distribution. While if dynamic transitional information is incorporated in the model, because of the dependency of "future" and "past", usually local time series model should be considered for continuous measurement, and Markov Chains or semi Markov models should be used to model discrete hidden classes. Actually, the HMM is one simple example of this kind. 
+
+People would argue that incorporating additional information should yield better classification results. However, it may not be true in practice. On one hand, a dynamic model like HMM is more complex to train and may has higher parameter estimation error. On the other hand, it is arguable if human activity really exhibits Markov transitions. Granted that transition tendency exist, the transitional matrix may (or for most people)NOT be stationary,which rend HMM unsuitable because it requires stationary transitions to propagate. Of cause non-stationary model could be considered, but we doubt it will be too complex to carry out real parameter estimation and inference work. That's why in our project, we tried both multinomial logistic regression and HMM as machine learning tools for the purpose of activity recognition.  
+
+Last but not least issue concerning the problem at hand is that the features we are using may not be all beneficial in terms of activity recognition. Since our previous feature selection is based mainly on empirical knowledge or intuition, the selected features may not be relevant or there may be redundancy in the feature space. PCA could be used to eliminate redundancy, but transformed features after PCA do not have a clear meaning. In this project, we consider regularized method for statistical feature selection. Particularly, we applied $L1$ regularized logistic regression and check the solution path. 
 
 
 \subsection{Activity Recognition as Supervised Learning}
 \label{subsec: learning}
 
-Concentrate single-mindedly on a narrative that:
-\begin{itemize}
-\item Describes the problem, and why it is interesting
-\item Describes your idea
-\item Defends your idea, showing how it solves the problem, and filling out the details.
-\end{itemize}
-On the way, cite relevant work in passing, but defer discussion to the end
+As an abstraction of above description, our task is to find a function $f: R^{19}\times T \rightarrow \{1,2,3,4,5\}$. If we assume that transition information is not important and consider obtained samples as $iid$ samples from certain distribution, our task is reduced to estimate $f: R^{19} \rightarrow \{1,2,3,4,5\}$. With this approximation, various classification methods are available, such as logistic regression, SVM, LDA(Linear discriminant analysis, instead of latent Dirichlet allocation:-), QDA, decision tree, etc. We adopt Multinomial Logistic Regression in this project, with graphic models presented in figure (\ref{fig:grapLogistic}) compared with HMM models.
 
-%%% Local Variables: 
-%%% mode: latex
-%%% TeX-master: "main"
-%%% End: 
+
+
+
