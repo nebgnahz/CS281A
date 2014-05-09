@@ -6,7 +6,7 @@ A supervised learning framework for activity recognition consists of data collec
 
 \subsection{Data Collection}
 \label{subsec: data-collection}
-In order to collect varies sensor data from devices such as Android phones and Google glass, an awesome system is designed and deployed which pulls readings of accelerometers, gyroscope, magnetic and rotation sensor continuously into a database. Each sensor record 3 dimensional data, namely, Cartesian $x,y,z$ for accelerometer, gyroscope, and magnetic sensor, and spherical $x_r,y_r,z_r$ for magnetic sensor. Hence the raw data has dimension $12$. Section (\ref{sec:awesome-system}) is devoted for more details of the sensor configuration. From a data analysis point of view, the obtained observations are a set of time series of sensor readings with descent time resolution of up to 10 nano seconds, and the labels are corresponding five factors $[1 - 5]$ each representing a specific activity. 
+In order to collect varies sensor data from devices such as Android phones and Google glass, an awesome system is designed and deployed which pulls readings of accelerometers, gyroscope, magnetic and rotation sensor continuously into a database. Each sensor record 3 dimensional data, namely, Cartesian $x,y,z$ for accelerometer, gyroscope, and magnetic sensor, and spherical $x_r,y_r,z_r$ for magnetic sensor. Hence the raw data has dimension $12$. Section (\ref{sec:awesome-system}) is devoted for more details of the sensor configuration. From a data analysis point of view, the obtained observations are a set of time series of sensor readings with descent time resolution of up to 10 nano seconds, and the labels are corresponding five factors $\{1,2,...,5\}$ each representing a specific activity. 
 
 The data is collected in a controlled manner, i.e. we asked one experimenter wearing all devices to perform activities as requested, and anther experimenter served as supervisor recording starting/ending time of each activity in the sequence. Hence labels of the a sample could be found easily by looking at the time slot. Note that IRB is a necessity for this kind of experiment if more volunteers are involved, thus for now the experiment is conducted by the authors. 
 
@@ -23,7 +23,6 @@ To sum up, we have
 
 \begin{table}
 \begin{center}
-
 \begin{tabular}{|l|l|}
       \hline
       \hline
@@ -49,8 +48,102 @@ Last but not least issue concerning the problem at hand is that the features we 
 \subsection{Activity Recognition as Supervised Learning}
 \label{subsec: learning}
 
-As an abstraction of above description, our task is to find a function $f: R^{19}\times T \rightarrow \{1,2,3,4,5\}$. If we assume that transition information is not important and consider obtained samples as $iid$ samples from certain distribution, our task is reduced to estimate $f: R^{19} \rightarrow \{1,2,3,4,5\}$. With this approximation, various classification methods are available, such as logistic regression, SVM, LDA(Linear discriminant analysis, instead of latent Dirichlet allocation:-), QDA, decision tree, etc. We adopt Multinomial Logistic Regression in this project, with graphic models presented in figure (\ref{fig:grapLogistic}) compared with HMM models.
+As an abstraction of above description, our task is to find a function $f: R^{19}\times T \rightarrow \{1,2,3,4,5\}$. If we assume that transition information is not important and consider obtained samples as $iid$ samples from certain distribution, our task is reduced to estimate $f: R^{19} \rightarrow \{1,2,3,4,5\}$. With this approximation, various classification methods are available, such as logistic regression, SVM, LDA(Linear discriminant analysis, instead of latent Dirichlet allocation:-), QDA, decision tree, etc. We adopt Multinomial Logistic Regression in this project, with graphic models presented in figure (\ref{fig:logiHmm}) compared with HMM models.
 
+%\begin{figure}[p]
+%  \begin{center}
+%    \includegraphics[width=0.4\textwidth]{C:/Dropbox/281A/figures/logiHmm.png}
+%    \caption{Logistis Regression vs. HMM}
+%    \label{fig:logiHmm}
+%  \end{center}
+%\end{figure}
+
+Let's briefly review some key formulation for multinomial logistic regression and hidden markov model. A comprehensive introduction of the theory can be found in Prof.Jordan's book. 
+
+As a generalization of logistic regress for multiclass problems, MLR model the probability of each class $y$ as a Logit function of linear combinations of feature variables $x$. Specifically, assume there are $K$ classes, for $m=1,2,...,K-1$
+\begin{equation}
+Pr(y_i=m) = \frac{e^{\beta_m^Tx_i}}{1+\sum_{k=1}^{K-1}\beta_k^Tx_i}
+\end{equation}
+and for $m=K$
+\begin{equation}
+Pr(y_i=K) = \frac{1}{1+\sum_{k=1}^{K-1}\beta_k^Tx_i}
+\end{equation}
+which ensures each probability has value between $[0,1]$ and their sum equal to $1$. The model parameters are vectors $\beta_1,\beta_2,...,\beta_{k-1}$. Note that our project, from a machine learning viewpoint consists of two task, which are parameter estimation for training and inference for testing. 
+
+The parameter estimation for logistic regression is a widely studied topic. Usually, various algorithms are available to compute the ML estimation in non-regularized case and MAP estimation in $L2$ regularized case. In fact, for logistic regression without regularization, the ML problem just reads,
+\begin{equation}
+min_{\beta} \sum_i -logp(y_i|x_i,\beta)
+\end{equation}
+and with $L2$ norm regularization, we simply add a $L2$ penalty for $beta$,
+\begin{equation}\nonumber
+min_{\beta} \sum_i -logp(y_i|x_i,\beta) + \lambda \Vert \beta \Vert^2
+\end{equation}
+the penalty term can also be thought of putting a prior for $\beta$, thus sometimes is called MAP estimation. From a vast pool of such algorithms we find  generalized iterative scaling, Iteratively Reweighted Least Squares (IRLS), L-BFGS (gradient based nonlinear programming), and some specialized coordinate descent algorithms. However, $L2$ norm only regularize parameter "proportionally", and usually is depreciated when feature selection is our main purpose. As an alternative, $L1$ norm is used instead of $L2$ with advantages that it tend to push some parameters to be exactly zero, thus favors feature selection. Actually, the improvement here is very similar to the advantages of using LASSO. In our project, we perform both logistic regression without regularization, and with $L1$ regularization as an attempt for feature selection, i.e.
+\begin{equation}\nonumber
+min_{\beta} \sum_i -logp(y_i|x_i,\beta) + \lambda \Vert \beta \Vert_1
+\end{equation}
+
+The inference problem, or in other words, the prediction problem aims at estimate class label $y$ given a new set of observations. In the case of logistic regression, this is simply done by calculating class probability $Pr(y_i=$ based on estimated $\hat{\beta}$, and then choose a proper cut-off probability to assign class labels. 
+
+As is mentioned in last section, a major drawback of common classification tools like Logistic Regression, SVM, QDA, Decision Tree make $iid$ assumption for samples and ignore temporal dependence in the phenomenon. Although most of existing research on activity recognition choose to ignore time dependence, we argue that transitional information may be able to help in that it can "filter out" impossible transitions and thus improve accuracy. The challenge for using HMM in our case is the choice of emission distribution. Because we have a relatively high feature dimension (not as high as computer vision though...), some EDA should be performed before concluding any form of distribution $Pr(x|y)$. We summarized our choice in table (\ref{table:distribution}) and EDA will be provided in later chapters. Note that the choice is only approximately correct, especially for $var(x),var(y),var(z)$, a more proper choice could be matrix Gamma distribution, but the parameter estimation is hard. 
+\begin{table}
+\begin{center}
+\begin{tabular}{|l|l|}
+      \hline
+      $\bar{x},\bar{y},\bar{z}|y$& multivariate Gaussian\\
+      \hline
+      $var(x),var(y),var(z)|y$ &  multivariate Gaussian\\
+      \hline
+      $cov(x,y),cov(y,z),cov(z,x)|y$& multivariate Gaussian\\
+      \hline
+      $\sqrt{x^2+y^2+z^2}|y$& Gamma\\
+      \hline
+      $x_{t+1}-x_{t},y_{t+1}-y_{t},z_{t+1}-z_{t}|y$ & multivariate Gaussian\\
+      \hline
+      $\frac{\sum_j w_j^2}{N}|y$& Exponential \\ \hline
+      $ -\sum_i p_ilog(p_i)|y$ & Gamma \\
+  \hline
+\end{tabular}
+\end{center}
+\caption{Extracted Features}
+\label{table:distribution}
+\end{table}
+
+
+The parameter estimation for HMM in our case is fairly simple, in fact, since we are in a supervised learning case, while training the hidden states are actually observable. The log likelihood is already a "complete" likelihood. i.e. in the parameterization
+\begin{equation} \nonumber
+l(q,y) = log\left\{\pi_{q_0}\prod_{t=1}^{T-1} a_{q_t,q_{t+1}}\prod_{t=0}^T Pr(y_t|q_t,\eta)\right\}
+\end{equation}
+both $q$ and $y$ are known. The ML estimation can be calculated directly by taking derivatives,
+\begin{equation} \nonumber
+\hat{a}_{i,j} = \frac{m_{ij}}{\sum_{k=1}^M m_{ij}}
+\end{equation}
+with $m_{ij}$ defined as in the class, and the parameter estimate for distribution in table (\ref{table:distribution}) can be calculated trivially in each class. For Gaussian and exponential, the results are well known, as for Gamma distribution with parameter $\theta$ and $\alpha$,
+\begin{equation}
+\hat{\theta} = \frac{1}{\alpha N}\sum_{i=1}^Nx_i
+\end{equation}
+we can compute $\alpha$ iteratively 
+\begin{equation}
+\alpha \leftarrow \alpha - \frac{ \ln(\alpha) - \psi(\alpha) - s }{ \frac{1}{\alpha} - \psi^{\prime}(\alpha) }
+\end{equation}
+with 
+\begin{equation} \nonumber
+s = \ln{\left(\frac{1}{N}\sum_{i=1}^N x_i\right)} - \frac{1}{N}\sum_{i=1}^N\ln{(x_i)}
+\end{equation}
+After parameter estimation/training, we use the obtained model for inference/testing. The classification problem is equivalent to estimate hidden state $q$ give observation $y$ and the model parameters. The posterior probability of $q$ is defined as 
+\begin{equation} \nonumber
+p(q_t^i=1|y,\eta) = \gamma_t^i
+\end{equation} 
+where backward and forward propagation can be performed to find $\gamma_t^i$
+\begin{equation}
+\gamma (q_t) = \sum_{q_{t+1}} \frac{\alpha (q_t) a_{q_t,q_{t+1}}}{\sum_{q_t} \alpha (q_t)a_{q_t,q_{t+1}}} \gamma (q_{t+1})
+\end{equation}
+and
+\begin{equation}
+\alpha (q_{t+1}) = \sum_{q_t} \alpha (q_t)  a_{q_t,q_{t+1}} p(y_{t+1}|q_{t+1})
+\end{equation}
+
+Finally, we pick up a reasonable cut-off probability threshold, e.g. $[\frac{1}{5},...,\frac{1}{5}]$, to assign the class labels for each $q_t$.
 
 
 
