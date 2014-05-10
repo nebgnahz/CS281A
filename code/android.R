@@ -15,8 +15,8 @@ data <- read.csv("http://galaxy.eecs.berkeley.edu:8000/log_hopefully_phone_glass
 
 ## clean up on time, now it should be easier for us to interprate the time
 options("digits.secs"=9)
-phone_start_time <- strptime("2014-05-10 13:13:01.000000001", "%Y-%m-%d %H:%M:%OS")
-glass_start_time <- strptime("2014-05-10 13:13:01.000000001", "%Y-%m-%d %H:%M:%OS")
+phone_start_time <- strptime("2014-05-10 13:13:00.000000000", "%Y-%m-%d %H:%M:%OS")
+glass_start_time <- strptime("2014-05-10 13:13:00.000000000", "%Y-%m-%d %H:%M:%OS")
 
 phone <- data[data$id == "9026086e-bd07-3f96-9622-757da2907a93",]
 glass <- data[data$id == "276dd3d0-fda1-31a8-9a74-8764e9d2a75e",]
@@ -39,8 +39,11 @@ plot(1:length(phone$ts2), phone$ts2)
 plot(1:length(glass$ts2), glass$ts2)
 
 ## multiplot(x_axis, y_axis, z_axis, phone_acc_plot)
-glass_acc_plot <- ggplot(glass_acc, aes(x = posixlt, y = y)) + geom_point()
-phone_acc_plot <- ggplot(phone_acc, aes(x = posixlt, y = y)) + geom_point()
+glass_acc_plot <- ggplot(glass_acc, aes(x = posixlt, y = y)) + geom_point() +
+  geom_vline(xintercept = as.numeric( glass_start_time + c(12, 33, 52, 70, 90, 100) - 2 ))
+## multiplot(x_axis, y_axis, z_axis, phone_acc_plot)
+phone_acc_plot <- ggplot(phone_acc, aes(x = posixlt, y = y)) + geom_point() +
+  geom_vline(xintercept = as.numeric( phone_start_time + c(12, 33, 52, 70, 90, 100) - 3 ))
 multiplot(glass_acc_plot, phone_acc_plot)
 
 glass_gyro_plot <- ggplot(glass_gyro, aes(x = posixlt, y = z)) + geom_point()

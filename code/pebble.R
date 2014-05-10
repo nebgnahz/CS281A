@@ -10,9 +10,9 @@ colnames(pebble_data) <- c("ts", "x", "y", "z", "isV")
 ## which( d == max(d)) 
 
 options("digits.secs"=3)
-start_time <- strptime("2014-05-03 15:58:06.737", "%Y-%m-%d %H:%M:%OS")
+pebble_start_time <- strptime("2014-05-03 15:58:06.737", "%Y-%m-%d %H:%M:%OS")
 pebble_data$ts2 <- pebble_data$ts - min(pebble_data$ts)
-pebble_data$posixlt <- start_time +  pebble_data$ts2 / 1000
+pebble_data$posixlt <- pebble_start_time +  pebble_data$ts2 / 1000
 
 ## head(pebble_data)
 ##             ts  x    y     z    isV ts2                 posixlt
@@ -25,10 +25,10 @@ pebble_data$posixlt <- start_time +  pebble_data$ts2 / 1000
 ## >
 
 ## ggplot preliminary EDA
-x_axis <- ggplot(pebble_data, aes(x = posixlt, y = x)) + geom_point()
-y_axis <- ggplot(pebble_data, aes(x = posixlt, y = y)) + geom_point()
-z_axis <- ggplot(pebble_data, aes(x = posixlt, y = z)) + geom_point()
-
-plot.new()
-frame()
+x_axis <- ggplot(pebble_data, aes(x = posixlt, y = x)) + geom_point() +
+  geom_vline(xintercept = as.numeric( pebble_start_time + c(12, 33, 52, 70, 90, 100) - 10.5 ))
+y_axis <- ggplot(pebble_data, aes(x = posixlt, y = y)) + geom_point() +
+  geom_vline(xintercept = as.numeric( pebble_start_time + c(12, 33, 52, 70, 90, 100) - 10.5 ))
+z_axis <- ggplot(pebble_data, aes(x = posixlt, y = z)) + geom_point() +
+  geom_vline(xintercept = as.numeric( pebble_start_time + c(12, 33, 52, 70, 90, 100) - 10.5 ))
 multiplot(x_axis, y_axis, z_axis)
