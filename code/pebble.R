@@ -1,7 +1,14 @@
-pebble_data <- read.csv("http://galaxy.eecs.berkeley.edu:8000/log_pebble.csv", header=F)
+pebble_data <- read.csv("http://galaxy.eecs.berkeley.edu:8000/log_hopefully_pebble.csv", header=F)
+
+## pebble_data <- read.csv("../data/logfile_cleaned.csv", header=F)
 
 ## data clean and re-formmatting
 colnames(pebble_data) <- c("ts", "x", "y", "z", "isV")
+
+## use to identify timestamp outliers
+## d <- diff(pebble_data$ts)
+## which( d == max(d)) 
+
 options("digits.secs"=3)
 start_time <- strptime("2014-05-03 15:58:06.737", "%Y-%m-%d %H:%M:%OS")
 pebble_data$ts2 <- pebble_data$ts - min(pebble_data$ts)
@@ -19,6 +26,9 @@ pebble_data$posixlt <- start_time +  pebble_data$ts2 / 1000
 
 ## ggplot preliminary EDA
 x_axis <- ggplot(pebble_data, aes(x = posixlt, y = x)) + geom_point()
-y_axis <- ggplot(pebble_data, aes(x = time, y = y)) + geom_point()
-z_axis <- ggplot(pebble_data, aes(x = ts, y = z)) + geom_point()
+y_axis <- ggplot(pebble_data, aes(x = posixlt, y = y)) + geom_point()
+z_axis <- ggplot(pebble_data, aes(x = posixlt, y = z)) + geom_point()
+
+plot.new()
+frame()
 multiplot(x_axis, y_axis, z_axis)

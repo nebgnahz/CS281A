@@ -48,12 +48,15 @@ server_run:
 	cd /home/cs281/data && python -m SimpleHTTPServer
 
 server_export:
-	mongoexport --host localhost --db bearloc --collection data --csv --out text.csv --fields type,id,eventnano,sysnano,x,y,z,xr,yr,zr
+	mongoexport --host localhost --db bearloc --collection data --csv --out text.csv --fields type,id,eventnano,sysnano,epoch,x,y,z,xr,yr,zr
 
 server_stat:
 	$(info counting number of records in bearloc ) 
 	mongo bearloc --eval "db.data.count()"
-	mongoexport --host localhost --db bearloc --collection data --csv --out text.csv --fields type; sort text.csv | uniq --count
+
+server_last:
+	mongo bearloc --eval "db.data.find({id:'276dd3d0-fda1-31a8-9a74-8764e9d2a75e'}).sort({epoch:-1}).limit(1)"
+	mongo bearloc --eval "db.data.find({id:'9026086e-bd07-3f96-9622-757da2907a93'}).sort({epoch:-1}).limit(1)"
 
 server_clean:
 	mongo bearloc --eval "db.data.remove()"
@@ -61,4 +64,3 @@ server_clean:
 sync_server:
 	rsync Makefile galaxy:~/Makefile
 	rsync -r galaxy:~/data/ ./data/
-

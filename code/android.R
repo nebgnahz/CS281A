@@ -10,28 +10,44 @@
 ## - 2014-04-26 17:24 | @collecting Antonio standing
 ## - 2014-04-26 17:24 | @collecting Antonio standing done
 
-
-data <- read.csv("http://galaxy.eecs.berkeley.edu:8000/data1.csv")
+## data <- read.csv("http://galaxy.eecs.berkeley.edu:8000/data1.csv")
+data <- read.csv("http://galaxy.eecs.berkeley.edu:8000/log_hopefully_phone_glass.csv")
 
 ## clean up on time, now it should be easier for us to interprate the time
 options("digits.secs"=9)
-phone_start_time <- strptime("2014-05-03 15:58:06.000000001", "%Y-%m-%d %H:%M:%OS")
-glass_start_time <- strptime("2014-05-03 15:59:01.000000001", "%Y-%m-%d %H:%M:%OS")
+phone_start_time <- strptime("2014-05-10 13:13:01.000000001", "%Y-%m-%d %H:%M:%OS")
+glass_start_time <- strptime("2014-05-10 13:13:01.000000001", "%Y-%m-%d %H:%M:%OS")
 
 phone <- data[data$id == "9026086e-bd07-3f96-9622-757da2907a93",]
 glass <- data[data$id == "276dd3d0-fda1-31a8-9a74-8764e9d2a75e",]
 
-phone$ts2 <- phone$sysnano - min(phone$sysnano)
+phone$ts2 <- phone$sysnano - min(phone$sysnano, na.rm=T)
 phone$posixlt <- phone_start_time + phone$ts2/1E9
-glass$ts2 <- glass$sysnano - min(glass$sysnano)
+phone_plot <- ggplot(phone, aes(x = posixlt, y = x)) + geom_point()
+glass$ts2 <- glass$sysnano - min(glass$sysnano, na.rm=T)
 glass$posixlt <- glass_start_time + glass$ts2/1E9
+glass_plot <- ggplot(glass, aes(x = posixlt, y = x)) + geom_point()
 
+phone_acc <- phone[phone$type == "accelerometer",]
+glass_acc<- glass[glass$type == "accelerometer",]
 
-data$ts[data$id == "276dd3d0-fda1-31a8-9a74-8764e9d2a75e"] <-
-  (data[data$id == "276dd3d0-fda1-31a8-9a74-8764e9d2a75e", 4] - min(data[data$id == "276dd3d0-fda1-31a8-9a74-8764e9d2a75e", 4])) / 1E9
+phone_gyro<- phone[phone$type == "gyroscope",]
+glass_gyro <- glass[glass$type == "gyroscope",]
 
-data[data$id == "9026086e-bd07-3f96-9622-757da2907a93", 4] <-
-  data[data$id == "9026086e-bd07-3f96-9622-757da2907a93", 4] - min(data[data$id == "9026086e-bd07-3f96-9622-757da2907a93", 4]) / 1000000000 + start_time
+par(mfrow = c(2, 1))
+plot(1:length(phone$ts2), phone$ts2)
+plot(1:length(glass$ts2), glass$ts2)
+
+## multiplot(x_axis, y_axis, z_axis, phone_acc_plot)
+glass_acc_plot <- ggplot(glass_acc, aes(x = posixlt, y = y)) + geom_point()
+phone_acc_plot <- ggplot(phone_acc, aes(x = posixlt, y = y)) + geom_point()
+multiplot(glass_acc_plot, phone_acc_plot)
+
+glass_gyro_plot <- ggplot(glass_gyro, aes(x = posixlt, y = z)) + geom_point()
+phone_gyro_plot <- ggplot(phone_gyro, aes(x = posixlt, y = z)) + geom_point()
+multiplot(glass_gyro_plot, phone_gyro_plot)
+
+### below should be updated
 
 acc <- data[data$type == "accelerometer",]
 gyro <- data[data$type == "gyroscope",]
