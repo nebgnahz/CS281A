@@ -62,5 +62,9 @@ server_clean:
 	mongo bearloc --eval "db.data.remove()"
 
 sync_server:
-	rsync Makefile galaxy:~/Makefile
+	rsync Makefile galaxy:~/
 	rsync -r galaxy:~/data/ ./data/
+	rsync -r data/ galaxy:~/data/
+
+publish:
+	sudo cp -r data/* /home/cs281/data
