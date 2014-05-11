@@ -12,6 +12,13 @@
 
 ## data <- read.csv("http://galaxy.eecs.berkeley.edu:8000/data1.csv")
 data <- read.csv("http://galaxy.eecs.berkeley.edu:8000/log_hopefully_phone_glass.csv")
+## hopefully ground truth
+## 12" walking
+## 33" downstairs
+## 52" standing
+## 70" upstairs
+## 90" running
+## 100" end
 
 ## clean up on time, now it should be easier for us to interprate the time
 options("digits.secs"=9)
