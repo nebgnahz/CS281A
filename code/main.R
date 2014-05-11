@@ -28,7 +28,8 @@ for (i in 1:length(labels)) {
 }
 
 dat_all[,'y'] <- as.factor(dat_all[,'y']); 
-plotmatrix(dat_all_glass[,c(2,3,15,18)], colour="gray20") + geom_smooth(method="lm")
+
+plotmatrix(dat_all[,c(2,3,15,18)], colour="gray20") + geom_smooth(method="lm")
 
 # It's time for these quasi-reliable libraries
 library('nnet')

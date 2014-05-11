@@ -4,11 +4,13 @@
 options("digits.secs"=9)
 start_time <- strptime("2014-05-10 23:10:00.000000000", "%Y-%m-%d %H:%M:%OS")
 
-phone <- read.csv("../data/phone_soda.csv", header=F)
+phone <- read.csv("http://galaxy.eecs.berkeley.edu:8000/phone_soda.csv")
 colnames(phone) <- c("ts", "x", "y", "z")
-glass <- read.csv("../data/glass_soda.csv", header=F)
+
+glass <- read.csv("http://galaxy.eecs.berkeley.edu:8000/glass_soda.csv")
 colnames(glass) <- c("ts", "x", "y", "z")
-pebble <- read.csv("../data/pebble_soda.csv", header=F)
+
+pebble <- read.csv("http://galaxy.eecs.berkeley.edu:8000/pebble_soda.csv")
 colnames(pebble) <- c("ts", "x", "y", "z")
 
 event_time <- c(14, 28, 59.1, 60.4, 92, 96, 100, 112, 140)
