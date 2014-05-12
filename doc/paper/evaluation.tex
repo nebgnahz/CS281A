@@ -1,13 +1,12 @@
 
 \section{Evaluation}
-
-We collected several data sets, however in this project due to page limit, only two of them that is collected in Soda Hall are shown in this section.
-
 \label{sec:evaluation}
 
-\subsection{Raw Data and Extracted Features: EDA}
+In this section, we present our data and the results of our algorithm.
 
-The raw data sets are shown in figure (\ref{fig:soda1}) and (\ref{fig:soda2}) with ground truth labels. A quick glance tell us that the three devices we are using generate measurement of different quality as far as classification is concerned. For example, in all axis $\{x,y,z\}$, android phone yields measurement with little noise. 
+\subsection{Raw Data and Extracted Features: EDA}
+The raw data sets are shown in Figure~\ref{fig:soda1} and \ref{fig:soda2} with ground truth labels. A quick glance tell us that the three devices we are using generate measurement of different quality as far as classification is concerned. For example, in all axis $\{x,y,z\}$, Phone yields measurement with little noise. 
+
 \begin{figure*}
   \centering
   \includegraphics[width=0.3\textwidth]{figures/eda_soda1_glass.pdf}
@@ -28,7 +27,7 @@ The raw data sets are shown in figure (\ref{fig:soda1}) and (\ref{fig:soda2}) wi
   \label{fig:soda2}
 \end{figure*}
 
-The empirical distribution for some selected features are shown in figure (\ref{fig:features}). We choose proper family of distribution for our HMM model by inspecting these empirical distributions, for example, we chose $Gamma$ distribution for Entropy,and multivariate Gaussian for $\bar{x},\bar{y},\bar{z}$. 
+The empirical distribution for some selected features are shown in Figure~\ref{fig:features}. We choose proper family of distributions for our HMM model by inspecting these empirical distributions, for example, we have chosen $Gamma$ distribution for Entropy, and multivariate Gaussian for $\bar{x},\bar{y},\bar{z}$. 
 
 \begin{figure}[h]
   \centering
@@ -37,8 +36,9 @@ The empirical distribution for some selected features are shown in figure (\ref{
   \label{fig:features}
 \end{figure}
 
-In order to check the relation among features, we look at the pairwise scatter plot, and one  example of these plots containing frequency domain feature is shown in figure (\ref{fig:pairwise}). From this figure we can further justify the conditional dependence and independence of the features for HMM. For example, we use  multivariate Gaussian instead of 
+In order to check the relation among features, we look at the pairwise scatter plot, and one  example of these plots containing frequency domain feature is shown in Figure~\ref{fig:pairwise}. From this figure we can further justify the conditional dependence and independence of the features for HMM. For example, we use multivariate Gaussian instead of 
 single Gaussian for $\bar{x},\bar{y},\bar{z}$, since they exhibit a strong correlation when conditioning on a specific activity.
+
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.45\textwidth]{figures/edafeature1.pdf}
@@ -46,16 +46,14 @@ single Gaussian for $\bar{x},\bar{y},\bar{z}$, since they exhibit a strong corre
   \label{fig:pairwise}
 \end{figure}
 
-
 \subsection{Classification Results}
-
 Both model fitting and testing errors are summarized in terms of overall accuracy and cross error table to indicate the performance of activity recognition with three different devices and two different learning methods. Let's examine the results in a device order for easy comparison.
 
-\subsubsection{Google Glass Results}
+\subsubsection{Glass Results}
 \label{sec:glassresult}
 \begin{itemize}
 \item \textbf{With Multinomial Logistic Regression} 
-The results are shown in table (\ref{tab:glassLR1}) and (\ref{tab:glassLR2})
+The results are shown in Table~\ref{tab:glassLR1}, \ref{tab:glassLR2}.
 
 \begin{table}[!htb]
 \begin{center}
@@ -66,7 +64,7 @@ The results are shown in table (\ref{tab:glassLR1}) and (\ref{tab:glassLR2})
       $0.9036635$ & $0.7469244$ \\
       \hline
 \end{tabular}
-\caption{Google Glass with LR: overall accuracy}
+\caption{Glass with LR: overall accuracy}
 \label{tab:glassLR1}
 \end{center}
 \end{table}
@@ -84,12 +82,12 @@ The results are shown in table (\ref{tab:glassLR1}) and (\ref{tab:glassLR2})
       5 & 0.000&0.000&0.026&0.000&0.767\\
       \hline
 \end{tabular}
-\caption{Google Glass with LR: Cross Error Table}
+\caption{Glass with LR: Cross Error Table}
 \label{tab:glassLR2}
 \end{center}
 \end{table}
 \item \textbf{With HMM}
-The results are shown in table (\ref{tab:glassHMM1}) and (\ref{tab:glassHMM2})
+The results are shown in Table~\ref{tab:glassHMM1} and \ref{tab:glassHMM2}.
 
 \begin{table}[!htb]
 \begin{center}
@@ -100,7 +98,7 @@ The results are shown in table (\ref{tab:glassHMM1}) and (\ref{tab:glassHMM2})
       $0.9599729$ & $0.7188049$ \\
       \hline
 \end{tabular}
-\caption{Google Glass with HMM: overall accuracy}
+\caption{Glass with HMM: overall accuracy}
 \label{tab:glassHMM1}
 \end{center}
 \end{table}
@@ -117,7 +115,7 @@ The results are shown in table (\ref{tab:glassHMM1}) and (\ref{tab:glassHMM2})
       5 & 0.000&0.005&0.013&0.000&0.759\\
       \hline
 \end{tabular}
-\caption{Google Glass with HMM: Cross Error Table}
+\caption{Glass with HMM: Cross Error Table}
 \label{tab:glassHMM2}
 \end{center}
 \end{table}
@@ -125,18 +123,18 @@ The results are shown in table (\ref{tab:glassHMM1}) and (\ref{tab:glassHMM2})
 
 As expected, the testing error is much higher than training error for both Logistic Regression and HMM, while on testing set our system and algorithm still gives above 70\% accuracy. 
 
-More interesting results can be revealed by looking at cross error table. Note that the number $\{1,2,...,5\}$ represent \{standing, walking, downstairs, upstairs, running\}. The rows of the table are ground truth and the columns are predicted value, thus the $\{i,j\}^{th}$ element of the table is interpreted as \textit{predicted value is $i$, while the true value should be $j$}. From this interpretation we see the diagonal terms in the table are actually accuracy in each class, and cross terms are different classification errors. \footnote{We normalize the error in each class, however different classes may have different sample size.}
+More interesting results can be revealed by looking at cross error table. Note that the number $\{1,2,...,5\}$ represent \{standing, walking, downstairs, upstairs, running\}. The rows of the table are ground truth and the columns are predicted value, thus the $\{i,j\}^{th}$ element of the table is interpreted as \textit{predicted value is $i$, while the true value should be $j$}. From this interpretation we see the diagonal terms in the table are actually accuracy in each class, and cross terms are different classification errors.\footnote{We normalize the error in each class, however different classes may have different sample size.}
 
 We observe that in the case of using Google glass, the logistic regression method performs a little better than with HMM. Specifically, in both algorithms, Google glass distinguished very well the \textit{upstairs} state. Intuitively, this could be explained by the fact that when people are going upstairs, their head usually look up and maintains a distinct position, while in other states, people tend to move their head occasionally, which produce additional noise to Google glass measurement and harms the classification. This phenomena can also been seen especially from the fact that, for Google glass data with both algorithm, the standing state yields the most error.
 
 Note also that we did not see improvement by incorporating transition (by using HMM), however, it does not exclude the benefit of transitional information. Actually, since our data set only measures a relatively short period, and the transitions of states are not statistically sufficient, we assume that for longer data with more complicated transitions, HMM method should show its advantages. 
 
-\subsubsection{Android Phone Results} 
+\subsubsection{Phone Results} 
 \label{subsec:phoneresult}
 \begin{itemize}
 
 \item \textbf{With Multinomial Logistic Regression} 
-The results are shown in table (\ref{tab:phoneLR1}) and (\ref{tab:phoneLR2})
+The results are shown in Table~\ref{tab:phoneLR1} and \ref{tab:phoneLR2}.
 
 \begin{table}[!htb]
 \begin{center}
@@ -171,7 +169,7 @@ The results are shown in table (\ref{tab:phoneLR1}) and (\ref{tab:phoneLR2})
 \end{table}
 
 \item \textbf{With HMM}
-The results are shown in table (\ref{tab:phoneHMM1})and (\ref{tab:phoneHMM2})
+The results are shown in Table~\ref{tab:phoneHMM1} and \ref{tab:phoneHMM2}.
 
 \begin{table}[!htb]
 \begin{center}
@@ -205,13 +203,13 @@ The results are shown in table (\ref{tab:phoneHMM1})and (\ref{tab:phoneHMM2})
 \end{table}
 \end{itemize}
 
-We observe that both algorithm performed terribly on Android phone data set. In effect, from previous part of EDA we already have a sense that phone data set is more noisy and indistinguishable. The reason for that is simple: we put the android phone in the trousers pocket, and in all states except for standing, people's legs move periodically with a similar pattern. Hence we see that with phone data set only the standing state is well classified, even with 1 accuracy with HMM, other states are mixed together and both classifiers only performs slightly better than a random guess. 
+We observe that both algorithm performed terribly on Phone data set. In effect, from previous part of EDA we already have a sense that Phone data set is more noisy and indistinguishable. The reason for that is simple: we put the Phone in the trousers pocket, and in all states except for standing, people's legs move periodically with a similar pattern. Hence we see that with Phone data set only the standing state is well classified, even with 1 accuracy with HMM, other states are mixed together and both classifiers only performs slightly better than a random guess. 
 
-\subsubsection{Pebble Watch Results}
+\subsubsection{Pebble Results}
 \label{subsec:pebbleresult}
 \begin{itemize}
 \item \textbf{With Multinomial Logistic Regression} 
-The results are shown in table (\ref{tab:pebbleLR1}) and (\ref{tab:pebbleLR2})
+The results are shown in Table~\ref{tab:pebbleLR1} and \ref{tab:pebbleLR2}.
 
 \begin{table}[!htb]
 \begin{center}
@@ -246,7 +244,7 @@ The results are shown in table (\ref{tab:pebbleLR1}) and (\ref{tab:pebbleLR2})
 \end{table}
 
 \item \textbf{With HMM}
-The results are shown in table (\ref{tab:pebbleHMM1})and (\ref{tab:pebbleHMM2})
+The results are shown in Table~\ref{tab:pebbleHMM1} and \ref{tab:pebbleHMM2}.
 
 \begin{table}[!htb]
 \begin{center}
