@@ -1,15 +1,14 @@
 \section{System and Data}
 \label{sec:system-data}
 
-In this section, we describe our system -- Android platform and Pebble platform. We then briefly cover the experiement setup.
-
+In this section, we describe our system implementation -- Android platform and Pebble platform, followed by a briefly cover of our the experiement setup.
 
 \subsection{Android Platform}
 \label{sec:android-platform}
 
-Our Android application is adapted from BearLoc\footnote{BearLoc is developed by Software Defined Buildings (SDB) group at Berkeley; the intial goal of that project is to provide an open-source implementation that is targeted at indoor semantic localization service.}. We built a continous sensor monitoring application on top of \texttt{BearLocService} which makes sensor data collection
+Our Android application is adapted from BearLoc\footnote{BearLoc is developed by Software Defined Buildings (SDB) group at Berkeley; the intial goal of that project is to provide an open-source implementation for indoor semantic localization service.}. We built a continous sensor monitoring application on top of \texttt{BearLocService} which makes sensor data collection
 
-Our initial application involves sampling all sorts of sensor data from Android platform, including acclerometer, gyroscope, magnetic field, light, GPS, WiFi signals, etc. However, through some preliminary study, we have found that mobile phones and Google Glass cannot easily handle the extensive sensing tasks, especially when we are trying to sample acceleration in a relative high frequency. Since we are interested in the comparison among these wearable devices and Pebble only has a 3D accelerometer, we implemented our Android application only for sampling acclerometer data.
+Our initial application involves sampling all sorts of sensor data from Android platform, including acclerometer, gyroscope, magnetic field, light, GPS, WiFi signals, etc. However, through some preliminary study, we have found that mobile phones and Google Glass cannot easily handle the extensive sensing tasks, especially when we are trying to sample acceleration in a relative high frequency. As has discussed in Section~\ref{subsec: data-model}, since we are interested in the comparison among these wearable devices and Pebble only has a 3D accelerometer, we then restricted our Android application only for sampling acclerometer data.
 
 The sensor data is obtained through \texttt{onSensorChanged()} API provided by Android OS. The sampling frequency is resource adaptive -- it turns out to be 100Hz for phones and 50Hz for Glass. 
 
@@ -37,7 +36,7 @@ On both Android and Pebble platform, the acclerometer coordinate system is defin
 
 %% { "_id" : ObjectId("536f303fe0323929bee2cf88"), "vendor" : "STMicroelectronics", "power" : 0.23000000417232513, "min delay" : 20000, "resolution" : 0.01362034771591425, "sysnano" : NumberLong("170075408653778"), "epoch" : NumberLong("1399795756898"), "version" : 1, "max range" : 19.613300323486328, "type" : "sensor info", "model" : "KR3DM 3-axis Accelerometer", "sensor" : "accelerometer", "id" : "9026086e-bd07-3f96-9622-757da2907a93" }
 
-However, the data differs in range, resolution and sample frequency. We use $g$ to denote the gravitational accelerometer constant (normal $9.81 m/s^2$). In Table~\ref{tab:sensorinfo}, we have listed the sensor information. Note that in our project, we have been using Samsung Galaxy S II, so the information is for that particular device. 
+However, the data differs in range, resolution and sample frequency. We use $g$ to denote the gravitational accelerometer constant (normal $9.81 m/s^2$). In Table~\ref{tab:sensorinfo}, we have listed the sensor information. Note that these values are extracted from our hardware sensor API so they are device dependent. Our window frame based feature extraction (see Section~\ref{subsec: data-transform}) is immune to the discrepancy of sampling frequency.
 
 \begin{table}
   \centering
@@ -64,7 +63,9 @@ However, the data differs in range, resolution and sample frequency. We use $g$ 
 \subsection{Data Collection}
 \label{sec:data-collection-2}
 
-With our data collection platform, we have performed a series of activities and collected the acclerometer data. Note that IRB is a necessity for this kind of experiment if more volunteers are involved, thus for now the experiment is conducted by the authors. Figure~\ref{fig:exp} shows how these devices are worn on the author and the experiement is being conducted. To obtain the ground truth, we use an extra iPhone to take videos continuously during the study. The video is manually processed to label the collected acclerometer data.
+With our data collection platform, we have performed a series of activities and collected the acclerometer data. Note that institutional review board (IRB) is a necessity for this kind of experiment if more volunteers are involved, thus for now the experiment is conducted by the authors. Figure~\ref{fig:exp} shows how these devices are worn on the author and the experiement is being conducted. To obtain the ground truth, we use an iPhone 5 to take videos continuously during the study. The video is manually processed to label the collected acclerometer data.
+
+Two traces that we are using for this report were collected on May 10th. The author first walks out of a conference room, and then walk upstairs to 7th floor. He then pauses a while (standing) and then walk downstairs. After comning back to 4th floor, he passed the hallway by running. In such way we are able to collect all possible activities in one run. Notice that each activity duration is relatively random (some are quite short) which can be a challenge for a precise inference; however such randomness makes the data more real to people's normal life. 
 
 \begin{figure}
   \centering
