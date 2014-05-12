@@ -1,54 +1,51 @@
-
 \section{Problem Formulation}
 \label{sec:problem-formulation}
 
-A supervised learning framework for activity recognition consists of data collection, transformation, and the design of adequate learning algorithm. In this section, we first briefly describe our data collection protocol, and detailed system description is postponed to section (\ref{sec:awesome-system}) for completeness. In section (\ref{subsec: data-transform}), we show how raw data is transformed into feature space. In addition, the problem of feature selection  for efficient learning is discussed. In Section (\ref{subsec: learning}), we formulate the learning problem, and propose two methods for a comparative study.  
+A supervised learning framework for activity recognition consists of data collection, transformation, and the design of adequate learning algorithm. In this section, we first briefly describe our data model (detailed system description and data collection is postponed to Section~\ref{sec:system-data} for completeness). In Section~\ref{subsec: data-transform}, we show how raw data is transformed into feature space. In addition, the problem of feature selection for efficient learning is discussed. In Section~\ref{subsec: learning}, we formulate the learning problem, and propose two methods for a comparative study.  
 
-\subsection{Data Collection}
-\label{subsec: data-collection}
-In order to collect varies sensor data from devices such as Android phones and Google glass, an awesome system is designed and deployed which pulls readings of accelerometers, gyroscope, magnetic and rotation sensor continuously into a database. Each sensor record 3 dimensional data, namely, Cartesian $x,y,z$ for accelerometer, gyroscope, and magnetic sensor, and spherical $x_r,y_r,z_r$ for magnetic sensor. Hence the raw data has dimension $12$. Section (\ref{sec:awesome-system}) is devoted for more details of the sensor configuration. From a data analysis point of view, the obtained observations are a set of time series of sensor readings with descent time resolution of up to 10 nano seconds, and the labels are corresponding five factors $\{1,2,...,5\}$ each representing a specific activity. 
+\subsection{Data Model}
+\label{subsec: data-model}
+We consider the sensor data model being a 3-dimensional accelerometer. Though gyroscope, magnetic sensor, rotation are also available and our data collection application supports them, for comparison with Pebble, we restrict the dataset to be accelerometer data. From a data analysis point of view, the obtained observations are a set of time series with fine time resolution. Each observation has 3-dimension $x, y, z$. 
 
-The data is collected in a controlled manner, i.e. we asked one experimenter wearing all devices to perform activities as requested, and anther experimenter served as supervisor recording starting/ending time of each activity in the sequence. Hence labels of the a sample could be found easily by looking at the time slot. Note that IRB is a necessity for this kind of experiment if more volunteers are involved, thus for now the experiment is conducted by the authors. 
+We also label the data from a video recording we did when we collect the data. We consider five different activities \{standing, walking, downstairs, upstairs, running\} ({\bf for brevity, we may use the number $\{1,2,...,5\}$ to represent each activity}). 
 
-\subsection{Data Transformation and Feature Selection}
+\subsection{Data Transformation \& Feature Selection}
 \label{subsec: data-transform}
 
-The raw data is a $12$ dimensional time series exhibiting non-stationarity with very fine time resolution. It is very difficult if not impossible to learn a good classifier that map the raw sensor readings directly to labels/classes. As most of the machine learning task, we face the challenge problem of feature extraction. In previous literature, it is widely acknowledged that a window frame based feature extraction could be adopted since most human activities are approximately periodic in nature. In this paper, we also consider feature extraction within a window frame, however, instead of merely focus on time and frequency domain feature, we proposed to add empirical distribution of frequencies as another categorical  feature. This is because intuitively, different activities may induce very different frequency nature of the body. To be specific, we add binned distribution of FFT coefficients for each window as a $d$ dimensional feature, where $d$ is the number of bins. In addition, we calculate the empirical entropy as another feature candidate. As for time domain, we propose to add first order derivative (difference in time series) as an additional feature, the reason for this is the observation that different activities usually have distinguished ``rate of change'' in terms of body movement.
+The raw data is a 3-dimensional time series exhibiting non-stationarity with fine time resolution. It is very difficult if not impossible to learn a good classifier that map the raw sensor readings directly to labels/classes. As most of the machine learning task, we face the challenge problem of feature extraction. In previous literature, it is widely acknowledged that a window frame based feature extraction could be adopted since most human activities are approximately periodic in nature. In this paper, we also consider feature extraction within a window frame, however, instead of merely focus on time and frequency domain feature, we proposed to add empirical distribution of frequencies as another categorical feature. This is because intuitively, different activities may induce very different frequency nature of the body. To be specific, we add binned distribution of Fast Fourier Transform (FFT) coefficients for each window as a $d$ dimensional feature, where $d$ is the number of bins. In addition, we calculate the empirical entropy as another feature candidate. As for time domain, we propose to add first order derivative (difference in time series) as an additional feature, the reason for this is the observation that different activities usually have distinguished ``rate of change'' in terms of body movement.
 
-To sum up, we have
+To sum up, we have the following features (also shown in Table~\ref{tab:feature1}):
 \begin{itemize}
 \item \textbf{Time Domain Features:} In each window, for one particular observation time series, we directly calculate Mean, Variance, and for each 3D streams of a particular sensor, we calculate the Covariance and the Magnitude. We also calculate the discrete first derivative and export the same statistics as features. 
 \item \textbf{Frequency Domain Features:} We use Fast Fourier Transform to delve into frequency domain, and export energy and entropy of resulted FFT coefficients in each window.
 \end{itemize}
 
 \begin{table}
-\begin{center}
-\begin{tabular}{|l|l|}
-      \hline
-      \hline
-      Time Domain & $\bar{x},\bar{y},\bar{z},var(x),var(y),var(z)$\\
-      &$cov(x,y),cov(y,z),cov(z,x)$\\
-      &$\sqrt{x^2+y^2+z^2}$\\
-      & $x_{t+1}-x_{t},y_{t+1}-y_{t},z_{t+1}-z_{t}$\\
-  \hline
-  Frequency Domain  & $\frac{\sum_j w_j^2}{N}, -\sum_i p_ilog(p_i)$  \\
-  \hline
-\end{tabular}
-\end{center}
-\caption{Extracted Features}
+  \centering
+  \begin{tabular}{c|c}
+    \hline
+    & $\bar{x}, \bar{y}, \bar{z}, var(x), var(y), var(z)$\\
+    Time Domain  & $cov(x,y), cov(y,z), cov(z,x)$\\
+    &$\sqrt{x^2+y^2+z^2}$\\
+    & $x_{t+1}-x_{t}, y_{t+1}-y_{t}, z_{t+1}-z_{t}$\\
+    \hline
+    Frequency Domain  & $\sum_j w_j^2/N, -\sum_i p_ilog(p_i)$  \\
+    \hline
+  \end{tabular}
+  \caption{Extracted Features}
+  \label{tab:feature1}
 \end{table}
 
-Hence the transformed data set is a $20$ dimensional tuple, with $19$ features and $1$ label indicating the ground truth of corresponding activity. Note that another information that are implicitly collected is the transition between activities. In fact, the consideration of adding this information or not is going to lead us to two entirely different probabilistic models. Namely, if dynamic transition information is ignored, the problem reduces to common classification problem, and the underlying assumption is that each observation is draw $iid$ from some distribution. While if dynamic transitional information is incorporated in the model, because of the dependency of "future" and "past", usually local time series model should be considered for continuous measurement, and Markov Chains or semi Markov models should be used to model discrete hidden classes. Actually, the HMM is one simple example of this kind. 
+Hence the transformed data set is a $20$ dimensional tuple, with $19$ features and $1$ label indicating the ground truth of corresponding activity. Note that another information that are implicitly collected is the transition between activities. In fact, the consideration of adding this information or not is going to lead us to two entirely different probabilistic models. Namely, if dynamic transition information is ignored, the problem reduces to common classification problem, and the underlying assumption is that each observation is draw $iid$ from some distribution. While if dynamic transitional information is incorporated in the model, because of the dependency of ``future'' and ``past'', usually local time series model should be considered for continuous measurement, and Markov Chains or semi Markov models should be used to model discrete hidden classes. Actually, the Hidden Markov Model (HMM) is one simple example of this kind. 
 
 People would argue that incorporating additional information should yield better classification results. However, it may not be true in practice. On one hand, a dynamic model like HMM is more complex to train and may has higher parameter estimation error. On the other hand, it is arguable if human activity really exhibits Markov transitions. Granted that transition tendency exist, the transitional matrix may (or for most people)NOT be stationary,which rend HMM unsuitable because it requires stationary transitions to propagate. Of cause non-stationary model could be considered, but we doubt it will be too complex to carry out real parameter estimation and inference work. That's why in our project, we tried both multinomial logistic regression and HMM as machine learning tools for the purpose of activity recognition.  
 
-Last but not least issue concerning the problem at hand is that the features we are using may not be all beneficial in terms of activity recognition. Since our previous feature selection is based mainly on empirical knowledge or intuition, the selected features may not be relevant or there may be redundancy in the feature space. PCA could be used to eliminate redundancy, but transformed features after PCA do not have a clear meaning. In this project, we consider regularized method for statistical feature selection. Particularly, we applied $L1$ regularized logistic regression and check the solution path. 
-
+Last but not least issue concerning the problem at hand is that the features we are using may not be all beneficial in terms of activity recognition. Since our previous feature selection is based mainly on empirical knowledge or intuition, the selected features may not be relevant or there may be redundancy in the feature space. Principle component analysis (PCA) could be used to eliminate redundancy, but transformed features after PCA do not have a clear meaning. In this project, we consider regularized method for statistical feature selection. Particularly, we applied $L1$ regularized logistic regression and check the solution path. 
 
 \subsection{Activity Recognition as Supervised Learning}
 \label{subsec: learning}
 
-As an abstraction of above description, our task is to find a function $f: R^{19}\times T \rightarrow \{1,2,3,4,5\}$. If we assume that transition information is not important and consider obtained samples as $iid$ samples from certain distribution, our task is reduced to estimate $f: R^{19} \rightarrow \{1,2,3,4,5\}$. With this approximation, various classification methods are available, such as logistic regression, SVM, LDA(Linear discriminant analysis, instead of latent Dirichlet allocation:-), QDA, decision tree, etc. We adopt Multinomial Logistic Regression in this project, with graphic models presented in figure %(\ref{fig:logiHmm}) compared with HMM models.
+As an abstraction of above description, our task is to find a function $f: R^{19}\times T \rightarrow \{1,2,3,4,5\}$. If we assume that transition information is not important and consider obtained samples as $iid$ samples from certain distribution, our task is reduced to estimate $f: R^{19} \rightarrow \{1,2,3,4,5\}$. With this approximation, various classification methods are available, such as logistic regression (LR), support vector machine (SVM), linear discriminant analysis (LDA), \ben{question here: instead of latent Dirichlet allocation:-),} quadratic discriminant analysis (QDA), decision tree (DT), etc. We adopt Multinomial Logistic Regression (MLR) in this project, with graphic models presented in Figure \ben{figure here?}. %(\ref{fig:logiHmm}) compared with HMM models.
 
 %\begin{figure}[p]
 %  \begin{center}
@@ -58,9 +55,9 @@ As an abstraction of above description, our task is to find a function $f: R^{19
 %  \end{center}
 %\end{figure}
 
-Let's briefly review some key formulation for multinomial logistic regression and hidden markov model. A comprehensive introduction of the theory can be found in Prof.Jordan's book. 
+Let's briefly review some key formulation for multinomial logistic regression and hidden markov model. A comprehensive introduction of the theory can be found in Prof.~Jordan's book.
 
-As a generalization of logistic regress for multiclass problems, MLR model the probability of each class $y$ as a Logit function of linear combinations of feature variables $x$. Specifically, assume there are $K$ classes, for $m=1,2,...,K-1$
+As a generalization of logistic regress for multiclass problems, MLR models the probability of each class $y$ as a Logit function of linear combinations of feature variables $x$. Specifically, assume there are $K$ classes, for $m=1,2,...,K-1$
 \begin{equation}
 Pr(y_i=m) = \frac{e^{\beta_m^Tx_i}}{1+\sum_{k=1}^{K-1}\beta_k^Tx_i}
 \end{equation}
@@ -78,17 +75,18 @@ and with $L2$ norm regularization, we simply add a $L2$ penalty for $beta$,
 \begin{equation}\nonumber
 min_{\beta} \sum_i -logp(y_i|x_i,\beta) + \lambda \Vert \beta \Vert^2
 \end{equation}
-the penalty term can also be thought of putting a prior for $\beta$, thus sometimes is called MAP estimation. From a vast pool of such algorithms we find  generalized iterative scaling, Iteratively Reweighted Least Squares (IRLS), L-BFGS (gradient based nonlinear programming), and some specialized coordinate descent algorithms. However, $L2$ norm only regularize parameter "proportionally", and usually is depreciated when feature selection is our main purpose. As an alternative, $L1$ norm is used instead of $L2$ with advantages that it tend to push some parameters to be exactly zero, thus favors feature selection. Actually, the improvement here is very similar to the advantages of using LASSO. In our project, we perform both logistic regression without regularization, and with $L1$ regularization as an attempt for feature selection, i.e.
+the penalty term can also be thought of putting a prior for $\beta$, thus sometimes is called MAP estimation. From a vast pool of such algorithms we find  generalized iterative scaling, Iteratively Reweighted Least Squares (IRLS), L-BFGS (gradient based nonlinear programming), and some specialized coordinate descent algorithms. However, $L2$ norm only regularize parameter ``proportionally'', and usually is depreciated when feature selection is our main purpose. As an alternative, $L1$ norm is used instead of $L2$ with advantages that it tend to push some parameters to be exactly zero, thus favors feature selection. Actually, the improvement here is very similar to the advantages of using LASSO. In our project, we perform both logistic regression without regularization, and with $L1$ regularization as an attempt for feature selection, i.e.
 \begin{equation}\nonumber
 min_{\beta} \sum_i -logp(y_i|x_i,\beta) + \lambda \Vert \beta \Vert_1
 \end{equation}
 
 The inference problem, or in other words, the prediction problem aims at estimate class label $y$ given a new set of observations. In the case of logistic regression, this is simply done by calculating class probability $Pr(y_i=$ based on estimated $\hat{\beta}$, and then choose a proper cut-off probability to assign class labels. 
 
-As is mentioned in last section, a major drawback of common classification tools like Logistic Regression, SVM, QDA, Decision Tree make $iid$ assumption for samples and ignore temporal dependence in the phenomenon. Although most of existing research on activity recognition choose to ignore time dependence, we argue that transitional information may be able to help in that it can "filter out" impossible transitions and thus improve accuracy. The challenge for using HMM in our case is the choice of emission distribution. Because we have a relatively high feature dimension (not as high as computer vision though...), some EDA should be performed before concluding any form of distribution $Pr(x|y)$. We summarized our choice in table (\ref{table:distribution}) and EDA will be provided in later chapters. Note that the choice is only approximately correct, especially for $var(x),var(y),var(z)$, a more proper choice could be matrix Gamma distribution, but the parameter estimation is hard. 
+As is mentioned in last section, a major drawback of common classification tools like Logistic Regression, SVM, QDA, Decision Tree make $iid$ assumption for samples and ignore temporal dependence in the phenomenon. Although most of existing research on activity recognition choose to ignore time dependence, we argue that transitional information may be able to help in that it can ``filter out'' impossible transitions and thus improve accuracy. The challenge for using HMM in our case is the choice of emission distribution. Because we have a relatively high feature dimension, some EDA should be performed before concluding any form of distribution $Pr(x|y)$. We summarized our choice in Table~\ref{table:distribution} and EDA will be provided in later chapters. Note that the choice is only approximately correct, especially for $var(x),var(y),var(z)$, a more proper choice could be matrix Gamma distribution, but the parameter estimation is hard. 
 \begin{table}
 \begin{center}
-\begin{tabular}{|l|l|}
+\begin{tabular}{c|c
+}
       \hline
       $\bar{x},\bar{y},\bar{z}|y$& multivariate Gaussian\\
       \hline
@@ -105,12 +103,12 @@ As is mentioned in last section, a major drawback of common classification tools
   \hline
 \end{tabular}
 \end{center}
-\caption{Extracted Features}
+\caption{Extracted Features Distribution}
 \label{table:distribution}
 \end{table}
 
 
-The parameter estimation for HMM in our case is fairly simple, in fact, since we are in a supervised learning case, while training the hidden states are actually observable. The log likelihood is already a "complete" likelihood. i.e. in the parameterization
+The parameter estimation for HMM in our case is fairly simple, in fact, since we are in a supervised learning case, while training the hidden states are actually observable. The log likelihood is already a ``complete'' likelihood. i.e. in the parameterization
 \begin{equation} \nonumber
 l(q,y) = log\left\{\pi_{q_0}\prod_{t=1}^{T-1} a_{q_t,q_{t+1}}\prod_{t=0}^T Pr(y_t|q_t,\eta)\right\}
 \end{equation}
@@ -145,5 +143,7 @@ and
 
 Finally, we pick up a reasonable cut-off probability threshold, e.g. $[\frac{1}{5},...,\frac{1}{5}]$, to assign the class labels for each $q_t$.
 
-
-
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End: 
