@@ -7,7 +7,7 @@ We collected several data sets, however in this project due to page limit, only 
 
 \subsection{Raw Data and Extracted Features: EDA}
 
-
+The raw data sets are shown in figure (\ref{fig:soda1}) and (\ref{fig:soda2})
 \begin{figure*}
   \centering
   \includegraphics[width=0.3\textwidth]{figures/eda_soda1_glass.pdf}
@@ -27,6 +27,25 @@ We collected several data sets, however in this project due to page limit, only 
   \caption{The second raw data set visualization with groundtruth labeled.}
   \label{fig:soda2}
 \end{figure*}
+
+The empirical distribution for some selected features are shown in figure (\ref{fig:features}), from which we choose proper family of distribution for our HMM model. 
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.45\textwidth]{figures/edafeature2.pdf}
+  \caption{Empirical distribution for some selected features}
+  \label{fig:features}
+\end{figure}
+
+In order to check the relation among features, we look at the pairwise scatter plot, and one  example of these plots containing frequency domain feature is shown in figure (\ref{fig:pairwise})
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.45\textwidth]{figures/edafeature1.pdf}
+  \caption{Pairwise scatter plot for some features}
+  \label{fig:pairwise}
+\end{figure}
+
 
 \subsection{Classification Results}
 
