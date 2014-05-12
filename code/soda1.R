@@ -18,10 +18,19 @@ l <- c("walking", "upstairs", "standing", "downstairs", "standing", "walking", "
 
 ## label(data, drift, event_time, l)
 phone_labeled <- label(phone, 12.6, event_time, l, 1E9)
-draw(phone_labeled)
+pdf("../doc/paper/figures/eda_soda1_phone.pdf", width=7, height=12)
+draw(phone_labeled, "Phone Dataset 1")
+dev.off()
 
 glass_labeled <- label(glass, 6, event_time, l, 1E9)
-draw(glass_labeled)
+pdf("../doc/paper/figures/eda_soda1_glass.pdf", width=7, height=12)
+draw(glass_labeled, "Glass Dataset 1")
+dev.off()
 
 pebble_labeled <- label(pebble, 1, event_time, l, 1E3)
-draw(pebble_labeled)
+pdf("../doc/paper/figures/eda_soda1_pebble.pdf", width=7, height=12)
+draw(pebble_labeled, "Pebble Dataset 1")
+dev.off()
+
+
+

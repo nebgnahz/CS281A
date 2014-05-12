@@ -14,6 +14,20 @@ glass_dat <- glass_labeled[glass_labeled$label != "unknown",]
 phone_dat <- phone_labeled[phone_labeled$label != "unknown",]
 pebble_dat <- pebble_labeled[pebble_labeled$label != "unknown",]
 
+## the following is used to draw legends
+## pdf("../doc/paper/figures/legend.pdf", width=8, height=8)
+## ggplot(phone_dat, aes(x = posixlt, y = x)) +
+##   geom_point( aes(colour = factor(label),shape=factor(label)), size = 5, alpha = 1 ) +
+##   xlab("time") +
+##   ylab("accelerometer x") +
+##   theme_bw() +
+##   theme(legend.position = "top",
+##         text = element_text(size = 20)) +
+##   scale_fill_discrete(name = "New Legend Title") +
+##   ggtitle(title)
+## dev.off()
+
+
 
 ## we should change the following to handle different type of data without copy pasting
 

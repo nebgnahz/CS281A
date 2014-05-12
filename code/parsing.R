@@ -9,16 +9,37 @@ label <- function(d, drift, event_time, l, scale) {
   return(d)
 }
 
-draw <- function(data) {
-  data_x <- ggplot(data, aes(x = posixlt, y = x)) +
-    geom_point( aes(colour = factor(label),shape=factor(label)) )
-  data_y <- ggplot(data, aes(x = posixlt, y = y)) +
-    geom_point( aes(colour = factor(label),shape=factor(label)) )
-  data_z <- ggplot(data, aes(x = posixlt, y = z)) +
-    geom_point( aes(colour = factor(label),shape=factor(label)) )
+draw <- function(data, title) {
+  data_cleaned <- data[data$label != "unknown",]
+  data_x <- ggplot(data_cleaned, aes(x = posixlt, y = x)) +
+    geom_point( aes(colour = factor(label),shape=factor(label)) ) +
+      xlab("time") +
+        ylab("accelerometer x") +
+          scale_fill_discrete(name="label") +
+            theme_bw() +
+              theme(legend.position="none",
+                    text = element_text(size = 20)) +
+                      ggtitle(title)
+  data_y <- ggplot(data_cleaned, aes(x = posixlt, y = y)) +
+    geom_point( aes(colour = factor(label),shape=factor(label)) ) +
+      xlab("time") +
+        ylab("accelerometer y") +
+          scale_fill_discrete(name="label") +
+            theme_bw() +
+              theme(legend.position="none",
+                    text = element_text(size = 20)) +
+                      ggtitle(title)
+  data_z <- ggplot(data_cleaned, aes(x = posixlt, y = z)) +
+    geom_point( aes(colour = factor(label),shape=factor(label)) ) +
+      xlab("time") +
+        ylab("accelerometer z") +
+          scale_fill_discrete(name="label") +
+            theme_bw() +
+              theme(legend.position="none",
+                    text = element_text(size = 20)) +
+                      ggtitle(title)
   multiplot(data_x, data_y, data_z)
 }
-
 
 
 
