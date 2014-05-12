@@ -7,7 +7,7 @@ We collected several data sets, however in this project due to page limit, only 
 
 \subsection{Raw Data and Extracted Features: EDA}
 
-The raw data sets are shown in figure (\ref{fig:soda1}) and (\ref{fig:soda2})
+The raw data sets are shown in figure (\ref{fig:soda1}) and (\ref{fig:soda2}) with ground truth labels. A quick glance tell us that the three devices we are using generate measurement of different quality as far as classification is concerned. For example, in all axis $\{x,y,z\}$, android phone yields measurement with little noise. 
 \begin{figure*}
   \centering
   \includegraphics[width=0.3\textwidth]{figures/eda_soda1_glass.pdf}
@@ -28,18 +28,18 @@ The raw data sets are shown in figure (\ref{fig:soda1}) and (\ref{fig:soda2})
   \label{fig:soda2}
 \end{figure*}
 
-The empirical distribution for some selected features are shown in figure (\ref{fig:features}), from which we choose proper family of distribution for our HMM model. 
+The empirical distribution for some selected features are shown in figure (\ref{fig:features}). We choose proper family of distribution for our HMM model by inspecting these empirical distributions, for example, we chose $Gamma$ distribution for Entropy,and multivariate Gaussian for $\bar{x},\bar{y},\bar{z}$. 
 
-\begin{figure}
+\begin{figure}[h]
   \centering
   \includegraphics[width=0.45\textwidth]{figures/edafeature2.pdf}
   \caption{Empirical distribution for some selected features}
   \label{fig:features}
 \end{figure}
 
-In order to check the relation among features, we look at the pairwise scatter plot, and one  example of these plots containing frequency domain feature is shown in figure (\ref{fig:pairwise})
-
-\begin{figure}
+In order to check the relation among features, we look at the pairwise scatter plot, and one  example of these plots containing frequency domain feature is shown in figure (\ref{fig:pairwise}). From this figure we can further justify the conditional dependence and independence of the features for HMM. For example, we use  multivariate Gaussian instead of 
+single Gaussian for $\bar{x},\bar{y},\bar{z}$, since they exhibit a strong correlation when conditioning on a specific activity.
+\begin{figure}[h]
   \centering
   \includegraphics[width=0.45\textwidth]{figures/edafeature1.pdf}
   \caption{Pairwise scatter plot for some features}
@@ -138,11 +138,11 @@ Note also that we did not see improvement by incorporating transition (by using 
 \item \textbf{With Multinomial Logistic Regression} 
 The results are shown in table (\ref{tab:phoneLR1}) and (\ref{tab:phoneLR2})
 
-\begin{table}[H]
+\begin{table}[h]
 \begin{center}
 \begin{tabular}{|l|l|}
       \hline
-      Training Error & Testing Error\\
+      Training Accuracy & Testing Accuracy\\
       \hline
       $0.748297$ & $0.3341772$ \\
       \hline
@@ -152,7 +152,7 @@ The results are shown in table (\ref{tab:phoneLR1}) and (\ref{tab:phoneLR2})
 \end{center}
 \end{table}
 
-\begin{table}[H]
+\begin{table}[h]
 \begin{center}
 \begin{tabular}{|l|l|l|l|l|l|}
       \hline
@@ -173,7 +173,7 @@ The results are shown in table (\ref{tab:phoneLR1}) and (\ref{tab:phoneLR2})
 \item \textbf{With HMM}
 The results are shown in table (\ref{tab:phoneHMM1})and (\ref{tab:phoneHMM2})
 
-\begin{table}[H]
+\begin{table}[h]
 \begin{center}
 \begin{tabular}{|l|l|}
       \hline
@@ -186,7 +186,7 @@ The results are shown in table (\ref{tab:phoneHMM1})and (\ref{tab:phoneHMM2})
 \label{tab:phoneHMM1}
 \end{center}
 \end{table}
-\begin{table}[H]
+\begin{table}[h]
 \begin{center}
 \begin{tabular}{|l|l|l|l|l|l|}
       \hline
@@ -213,7 +213,7 @@ We observe that both algorithm performed terribly on Android phone data set. In 
 \item \textbf{With Multinomial Logistic Regression} 
 The results are shown in table (\ref{tab:pebbleLR1}) and (\ref{tab:pebbleLR2})
 
-\begin{table}[H]
+\begin{table}[h]
 \begin{center}
 \begin{tabular}{|l|l|}
       \hline
@@ -227,7 +227,7 @@ The results are shown in table (\ref{tab:pebbleLR1}) and (\ref{tab:pebbleLR2})
 \end{center}
 \end{table}
 
-\begin{table}[H]
+\begin{table}[h]
 \begin{center}
 \begin{tabular}{|l|l|l|l|l|l|}
       \hline
@@ -248,7 +248,7 @@ The results are shown in table (\ref{tab:pebbleLR1}) and (\ref{tab:pebbleLR2})
 \item \textbf{With HMM}
 The results are shown in table (\ref{tab:pebbleHMM1})and (\ref{tab:pebbleHMM2})
 
-\begin{table}[H]
+\begin{table}[h]
 \begin{center}
 \begin{tabular}{|l|l|}
       \hline
@@ -261,7 +261,7 @@ The results are shown in table (\ref{tab:pebbleHMM1})and (\ref{tab:pebbleHMM2})
 \label{tab:pebbleHMM1}
 \end{center}
 \end{table}
-\begin{table}[H]
+\begin{table}[h]
 \begin{center}
 \begin{tabular}{|l|l|l|l|l|l|}
       \hline

@@ -2,9 +2,15 @@
 \section{Related Work}
 \label{sec:related-work}
 \ben{This is just for adding the references. I have NOT read them well and summarized them well, so we need to change the texts.}
+\yuxun{OK, I am doing it}
 
-\cite{kwapisz2011activity} focuse on using the accelerometer on phones for activity recognition. \cite{yan2012energy, srinivasan2012accurate} described an adpative approach for energy efficient sampling. 
-\cite{lee2011activity} uses Hierarchical Hidden Markov Models (HHMM). 
+\cite{kwapisz2011activity} collected a large set of cell phone sensor data with labeled activities. A decision tree algorithm \footnote{J48 of Weka package} is mainly used for classification. However, according to our experiment and discussion, pocket phone accelerometer data is usually very noisy in that human leg movement is similar for some activities. We suggest that activity recognition can be greatly improved by considering various device measurements such as Google glass for head movement and Pebble watch for forearm movement.
+
+\cite{srinivasan2012accurate,lee2011activity} focus on improving the recognition accuracy by building more complicated statistical models. For example, in \cite{srinivasan2012accurate}, a Two-Tier classifier is studied and in \cite{lee2011activity}, a Hierarchical Hidden Markov Model is considered. Nonetheless, these models suffers from complicated training step, and may not be tractable if more features from diverse devices are included. 
+
+\cite{yan2012energy} discusses the energy consumption issues when using accelerometers in mobile devices for activity learning. They proposed a framework to adaptively choose sampling frequency when different activities are performed. This is important especially when measuring is conducted by consistently running application on cell phone, Google glass, or smart watches. The choice of sampling rate also constitutes our future works. 
+
+ 
 %%% Local Variables: 
 %%% mode: latex
 %%% TeX-master: "main"
