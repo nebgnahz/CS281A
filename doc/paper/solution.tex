@@ -1,7 +1,8 @@
 \section{System and Data}
 \label{sec:data-collection}
 
-In this section, we describe our system (Android platform and Pebble platform), followed by our data collection procedure.
+In this section, we describe our system -- Android platform and Pebble platform. We then briefly cover the experiement setup. \ben{maybe this should be in introduction.} Throughout the paper, we use {\em Phone} for mobile phones, and {\em Glass}, {\em Pebble} for Google Glass and Pebble Smartwatch, respetively.
+
 
 \subsection{Android Platform}
 \label{sec:android-platform}
@@ -38,8 +39,6 @@ On both Android and Pebble platform, the acclerometer coordinate system is defin
 
 However, the data differs in range, resolution and sample frequency. We use $g$ to denote the gravitational accelerometer constant (normal $9.81 m/s^2$). In Table~\ref{tab:sensorinfo}, we have listed the sensor information. Note that in our project, we have been using Samsung Galaxy S II, so the information is for that particular device. 
 
-Throughout the paper, we use {\em Phone} for Samsumg mobile phone, and {\em Glass}, {\em Pebble} for Google Glass and Pebble Smartwatch, respetively.
-
 \begin{table}
   \centering
   \begin{tabular}{c|c|c|c}
@@ -65,10 +64,14 @@ Throughout the paper, we use {\em Phone} for Samsumg mobile phone, and {\em Glas
 \subsection{Data Collection}
 \label{sec:data-collection-2}
 
+With our data collection platform, we have performed a series of activities and collected the acclerometer data. Figure~\ref{fig:exp} shows how these devices are worn on a user and the experiement is being conducted. To obtain the ground truth, we use an extra iPhone to take videos continuously during the study. The video is manually processed to label the collected acclerometer data.
 
-
-
-
+\begin{figure}
+  \centering
+  \includegraphics[width=0.9\columnwidth]{figures/experiement_setup.png}
+  \caption{Data collection process of simutaneously wearing three different devices and an illustration of their relative positions on the testee's body.}
+  \label{fig:exp}
+\end{figure}
 
 
 
