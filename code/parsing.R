@@ -9,9 +9,10 @@ label <- function(d, drift, event_time, l, scale) {
   return(d)
 }
 
-draw <- function(data, title) {
+draw <- function(data, title, shift) {
   data_cleaned <- data[data$label != "unknown",]
-  data_x <- ggplot(data_cleaned, aes(x = posixlt, y = x)) +
+  data_cleaned$nt <- data_cleaned$posixlt + shift
+  data_x <- ggplot(data_cleaned, aes(x = nt + shift, y = x)) +
     geom_point( aes(colour = factor(label),shape=factor(label)) ) +
       xlab("time") +
         ylab("accelerometer x") +
@@ -20,7 +21,7 @@ draw <- function(data, title) {
               theme(legend.position="none",
                     text = element_text(size = 20)) +
                       ggtitle(title)
-  data_y <- ggplot(data_cleaned, aes(x = posixlt, y = y)) +
+  data_y <- ggplot(data_cleaned, aes(x = nt + shift, y = y)) +
     geom_point( aes(colour = factor(label),shape=factor(label)) ) +
       xlab("time") +
         ylab("accelerometer y") +
@@ -29,7 +30,7 @@ draw <- function(data, title) {
               theme(legend.position="none",
                     text = element_text(size = 20)) +
                       ggtitle(title)
-  data_z <- ggplot(data_cleaned, aes(x = posixlt, y = z)) +
+  data_z <- ggplot(data_cleaned, aes(x = nt + shift, y = z)) +
     geom_point( aes(colour = factor(label),shape=factor(label)) ) +
       xlab("time") +
         ylab("accelerometer z") +
