@@ -51,9 +51,8 @@ Both model fitting and testing errors are summarized in terms of overall accurac
 
 \subsubsection{Glass Results}
 \label{sec:glassresult}
-\begin{itemize}
-\item \textbf{With Multinomial Logistic Regression} 
-The results are shown in Table~\ref{tab:glassLR1}, \ref{tab:glassLR2}.
+
+We summarize the results \textbf{with Multinomial Logistic Regression} in Table~\ref{tab:glassLR1}, \ref{tab:glassLR2} and \textbf{with HMM} in Table~\ref{tab:glassHMM1} and \ref{tab:glassHMM2}.
 
 \begin{table}[!htb]
 \begin{center}
@@ -86,8 +85,6 @@ The results are shown in Table~\ref{tab:glassLR1}, \ref{tab:glassLR2}.
 \label{tab:glassLR2}
 \end{center}
 \end{table}
-\item \textbf{With HMM}
-The results are shown in Table~\ref{tab:glassHMM1} and \ref{tab:glassHMM2}.
 
 \begin{table}[!htb]
 \begin{center}
@@ -119,11 +116,10 @@ The results are shown in Table~\ref{tab:glassHMM1} and \ref{tab:glassHMM2}.
 \label{tab:glassHMM2}
 \end{center}
 \end{table}
-\end{itemize}
 
 As expected, the testing error is much higher than training error for both Logistic Regression and HMM, while on testing set our system and algorithm still gives above 70\% accuracy. 
 
-More interesting results can be revealed by looking at cross error table. Note that the number $\{1,2,...,5\}$ represent \{standing, walking, downstairs, upstairs, running\}. The rows of the table are ground truth and the columns are predicted value, thus the $\{i,j\}^{th}$ element of the table is interpreted as \textit{predicted value is $i$, while the true value should be $j$}. From this interpretation we see the diagonal terms in the table are actually accuracy in each class, and cross terms are different classification errors.\footnote{We normalize the error in each class, however different classes may have different sample size.}
+More interesting results can be revealed by looking at cross error table. Note that the number $\{1,2,...,5\}$ represent \{standing, walking, downstairs, upstairs, running\}. The rows of the table are ground truth and the columns are predicted value, thus the $\{i,j\}^{th}$ element of the table is interpreted as \textit{predicted value is $i$, while the true value should be $j$}. From this interpretation we see the diagonal terms in the table are actually accuracy in each class, and cross terms are different classification errors\footnote{We normalize the error in each class, however different classes may have different sample size.}.
 
 We observe that in the case of using Google glass, the logistic regression method performs a little better than with HMM. Specifically, in both algorithms, Google glass distinguished very well the \textit{upstairs} state. Intuitively, this could be explained by the fact that when people are going upstairs, their head usually look up and maintains a distinct position, while in other states, people tend to move their head occasionally, which produce additional noise to Google glass measurement and harms the classification. This phenomena can also been seen especially from the fact that, for Google glass data with both algorithm, the standing state yields the most error.
 
@@ -131,10 +127,8 @@ Note also that we did not see improvement by incorporating transition (by using 
 
 \subsubsection{Phone Results} 
 \label{subsec:phoneresult}
-\begin{itemize}
 
-\item \textbf{With Multinomial Logistic Regression} 
-The results are shown in Table~\ref{tab:phoneLR1} and \ref{tab:phoneLR2}.
+We summarize the results \textbf{with Multinomial Logistic Regression} in Table~\ref{tab:phoneLR1} and \ref{tab:phoneLR2}, and \textbf{with HMM} in Table~\ref{tab:phoneHMM1} and \ref{tab:phoneHMM2}.
 
 \begin{table}[!htb]
 \begin{center}
@@ -168,9 +162,6 @@ The results are shown in Table~\ref{tab:phoneLR1} and \ref{tab:phoneLR2}.
 \end{center}
 \end{table}
 
-\item \textbf{With HMM}
-The results are shown in Table~\ref{tab:phoneHMM1} and \ref{tab:phoneHMM2}.
-
 \begin{table}[!htb]
 \begin{center}
 \begin{tabular}{c|c}
@@ -201,15 +192,13 @@ The results are shown in Table~\ref{tab:phoneHMM1} and \ref{tab:phoneHMM2}.
 \label{tab:phoneHMM2}
 \end{center}
 \end{table}
-\end{itemize}
 
 We observe that both algorithm performed terribly on Phone data set. In effect, from previous part of EDA we already have a sense that Phone data set is more noisy and indistinguishable. The reason for that is simple: we put the Phone in the trousers pocket, and in all states except for standing, people's legs move periodically with a similar pattern. Hence we see that with Phone data set only the standing state is well classified, even with 1 accuracy with HMM, other states are mixed together and both classifiers only performs slightly better than a random guess. 
 
 \subsubsection{Pebble Results}
 \label{subsec:pebbleresult}
-\begin{itemize}
-\item \textbf{With Multinomial Logistic Regression} 
-The results are shown in Table~\ref{tab:pebbleLR1} and \ref{tab:pebbleLR2}.
+
+We summarize the results \textbf{with Multinomial Logistic Regression} in Table~\ref{tab:pebbleLR1} and \ref{tab:pebbleLR2}, and \textbf{with HMM} in Table~\ref{tab:pebbleHMM1} and \ref{tab:pebbleHMM2}.
 
 \begin{table}[!htb]
 \begin{center}
@@ -243,9 +232,6 @@ The results are shown in Table~\ref{tab:pebbleLR1} and \ref{tab:pebbleLR2}.
 \end{center}
 \end{table}
 
-\item \textbf{With HMM}
-The results are shown in Table~\ref{tab:pebbleHMM1} and \ref{tab:pebbleHMM2}.
-
 \begin{table}[!htb]
 \begin{center}
 \begin{tabular}{c|c}
@@ -276,11 +262,8 @@ The results are shown in Table~\ref{tab:pebbleHMM1} and \ref{tab:pebbleHMM2}.
 \label{tab:pebbleHMM2}
 \end{center}
 \end{table}
-\end{itemize}
 
 The results for Pebble data could be analyzed similarly. The performance of our classifier on this data set is in the middle of the performance on last two data sets. One interesting phenomenon is that the running state is very well classified, which could also be explained by intuition. When people are running, their forearm usually move with much higher frequency than in any other states. The classification of running versus other activities are relatively simple because in our feature selection procedure, we also include frequency domain features. 
-
-To sum up, we have observed that measurements of different devices can help to distinguish different activities. As is mentioned above, this specialization comes from the fact that three devices are actually measuring the movement of different parts of human body. Therefore we propose that a combined sensoring system could greatly improve the classification performance of activity recognition. Major part of our future work will be devoted to this direction. 
 
 %%% Local Variables: 
 %%% mode: latex
