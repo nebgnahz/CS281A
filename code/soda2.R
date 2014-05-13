@@ -29,3 +29,20 @@ pebble_labeled <- label(pebble, -52.5, event_time, l, 1E3)
 pdf("../doc/paper/figures/eda_soda2_pebble.pdf", width=7, height=12)
 draw(pebble_labeled, "Pebble Dataset 2", 52.5)
 dev.off()
+
+
+## the following are for poster drawings
+phone_labeled <- label(phone, 21, event_time, l, 1E9)
+pdf("../doc/paper/figures/eda_soda2_poster_phone.pdf", height=7, width=18)
+draw2(phone_labeled, "Phone Dataset 2", -21)
+dev.off()
+
+glass_labeled <- label(glass, 5.5, event_time, l, 1E9)
+pdf("../doc/paper/figures/eda_soda2_poster_glass.pdf", height=7, width=18)
+draw2(glass_labeled, "Glass Dataset 2", -5.5)
+dev.off()
+
+pebble_labeled <- label(pebble, -52.5, event_time, l, 1E3)
+pdf("../doc/paper/figures/eda_soda2_poster_pebble.pdf", height=7, width=18)
+draw2(pebble_labeled, "Pebble Dataset 2", 52.5)
+dev.off()
