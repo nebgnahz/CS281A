@@ -46,7 +46,7 @@
 % For tracking purposes - this is V2.0 - May 2012
 
 \documentclass{sig-alternate}
-
+\toappear{CS281A Fall 2014 Class Project.}
 %% customization goes into input macros
 \input{inputmacros}
 
@@ -123,7 +123,7 @@
 
 \maketitle
 \begin{abstract}
-We believe that for activity recognition tasks, different devices will have different performance. However, it's unclear that 1) which device is better for which activity, 2) the quantitative differnece. In this project, we compare the activity recognition accuracy for two devices -- Google Glass and android phones. Through our extensive studies, we have found that Glass is better than phones in general, and with the same algorithm, Glass outperforms phone by XX\%.
+We focus on activity recognition problem on commercial mobile platforms including Android phones, Google Glass and Pebble Smartwatch. Because of their different positions on human body, their performances would differ; and this project aims to investigate 1) which device is better for which activity, 2) the quantitative differnece. We describe the whole process of system implementation, data collection, feature extraction and activity recognition, and present our findings of the performance for each device.
 \end{abstract}
 
 % A category with the (minimum) three required fields
@@ -133,7 +133,7 @@ We believe that for activity recognition tasks, different devices will have diff
 
 % \terms{Theory}
 
-\keywords{Activity Recognition; Google Glass; Android Phones; HMM}
+\keywords{Activity Recognition; Google Glass; Android Phones; Pebble; Multinomial Logistic Regression; HMM}
 
 %% The outline comes from this link: http://www.cosc.canterbury.ac.nz/open/students/peyton-jones-writing_a_paper-slides.pdf
 \input{intro}
@@ -147,7 +147,7 @@ We believe that for activity recognition tasks, different devices will have diff
 % no acks in anonymous submission
 }{
   \section{Acknowledgments}
-  We deliver our sincere thanks to Prof.~Michael Jordan for his excellent teaching and explanation of a wide spectrum of statstical inference techniques. Kaifei Chen from SDB group has also helped us in developing the Android application using \texttt{BearLoc} project. Also Prof. Bj\"orn Hartmann is generous enough to lend us his Google Glass and Qualcomm Toq\footnote{Toq is not as friendly for programming as Pebble is. So we made the decision of using Pebble instead of Toq.} for the study. Moreover, many people are involved in the discussion of this project and how the study should be carried; without naming them one by one, we express our gratitude here.
+  We deliver our sincere thanks to Prof.~Michael Jordan for his excellent teaching and explanation of a wide spectrum of statstical inference techniques. With the help from Kaifei Chen, we are able to quickly prototype the Android application using his \texttt{BearLoc} project. Also Prof.~Bj\"orn Hartmann is generous enough to lend us his Google Glass and Qualcomm Toq\footnote{Toq is not as friendly for programming as Pebble is. So we made the decision of using Pebble instead of Toq.} for the study. Moreover, many people are involved in the discussion of this project and how the study should be carried; without naming them one by one, we express our gratitude here.
 }
 
 

@@ -29,9 +29,9 @@ The raw data sets are shown in Figure~\ref{fig:soda1} and \ref{fig:soda2} with g
 
 The empirical distribution for some selected features are shown in Figure~\ref{fig:features}. We choose proper family of distributions for our HMM model by inspecting these empirical distributions, for example, we have chosen $Gamma$ distribution for Entropy, and multivariate Gaussian for $\bar{x},\bar{y},\bar{z}$. 
 
-\begin{figure}[h]
+\begin{figure}
   \centering
-  \includegraphics[width=0.45\textwidth]{figures/edafeature2.pdf}
+  \includegraphics[width=0.5\textwidth]{figures/edafeature2.pdf}
   \caption{Empirical distribution for some selected features}
   \label{fig:features}
 \end{figure}
@@ -39,9 +39,9 @@ The empirical distribution for some selected features are shown in Figure~\ref{f
 In order to check the relation among features, we look at the pairwise scatter plot, and one  example of these plots containing frequency domain feature is shown in Figure~\ref{fig:pairwise}. From this figure we can further justify the conditional dependence and independence of the features for HMM. For example, we use multivariate Gaussian instead of 
 single Gaussian for $\bar{x},\bar{y},\bar{z}$, since they exhibit a strong correlation when conditioning on a specific activity.
 
-\begin{figure}[h]
+\begin{figure}
   \centering
-  \includegraphics[width=0.45\textwidth]{figures/edafeature1.pdf}
+  \includegraphics[width=0.48\textwidth]{figures/edafeature1.pdf}
   \caption{Pairwise scatter plot for some features}
   \label{fig:pairwise}
 \end{figure}

@@ -45,7 +45,7 @@ Last but not least issue concerning the problem at hand is that the features we 
 \subsection{Activity Recognition as Supervised Learning}
 \label{subsec: learning}
 
-As an abstraction of above description, our task is to find a function $f: R^{19}\times T \rightarrow \{1,2,3,4,5\}$. If we assume that transition information is not important and consider obtained samples as $iid$ samples from certain distribution, our task is reduced to estimate $f: R^{19} \rightarrow \{1,2,3,4,5\}$. With this approximation, various classification methods are available, such as logistic regression (LR), support vector machine (SVM), linear discriminant analysis (LDA), \ben{question here: instead of latent Dirichlet allocation:-),} quadratic discriminant analysis (QDA), decision tree (DT), etc. We adopt Multinomial Logistic Regression (MLR) in this project, with graphic models presented in Figure \ben{figure here?}. %(\ref{fig:logiHmm}) compared with HMM models.
+As an abstraction of above description, our task is to find a function $f: R^{19}\times T \rightarrow \{1,2,3,4,5\}$. If we assume that transition information is not important and consider obtained samples as $iid$ samples from certain distribution, our task is reduced to estimate $f: R^{19} \rightarrow \{1,2,3,4,5\}$. With this approximation, various classification methods are available, such as logistic regression (LR), support vector machine (SVM), linear discriminant analysis (LDA), quadratic discriminant analysis (QDA), decision tree (DT), etc. We adopt Multinomial Logistic Regression (MLR) and Hidden Markove Model (HMM) in this project.
 
 %\begin{figure}[p]
 %  \begin{center}
