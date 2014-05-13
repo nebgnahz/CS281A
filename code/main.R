@@ -35,9 +35,13 @@ pebble_dat <- pebble_labeled[pebble_labeled$label != "unknown",]
 window = 10;
 dat_all <- NULL
 for (i in 1:length(labels)) {
-  feature1 = feature_ext(glass_dat[glass_dat$label==labels[i],], window);
+  sub_data <- glass_dat[glass_dat$label==labels[i],]
+  feature1 = feature_ext(sub_data, window);
   y = rep(i, dim(feature1)[1]);
   dat1 = cbind(y,feature1);
+  T = dim(feature1)[1]
+  tt = seq(min(sub_data$posixlt),max(sub_data$posixlt),length.out=T)
+  dat1 = cbind(dat1,tt);
   dat_all <- rbind(dat_all, dat1)
 }
 
