@@ -1,7 +1,6 @@
 options("digits.secs"=9)
 start_time <- strptime("2014-05-10 23:30:00.000000000", "%Y-%m-%d %H:%M:%OS")
 
-
 phone <- read.csv("http://galaxy.eecs.berkeley.edu:8000/phone_soda2.csv")
 colnames(phone) <- c("ts", "x", "y", "z")
 

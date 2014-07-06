@@ -32,6 +32,3 @@ pebble_labeled <- label(pebble, 1, event_time, l, 1E3)
 pdf("../doc/paper/figures/eda_soda1_pebble.pdf", width=7, height=12)
 draw(pebble_labeled, "Pebble Dataset 1", -1)
 dev.off()
-
-
-

@@ -215,6 +215,3 @@ dat_all_phone[,'y'] <- as.factor(dat_all_phone[,'y']);
 plotmatrix(dat_all_glass[,c(2,3,15,18)], colour="gray20") + geom_smooth(method="lm")
 
 write.csv(dat_all_glass, file = 'action_glass.csv')
-
-
-
